@@ -1,0 +1,53 @@
+<view class="container">
+  <view class="tabs">
+    <view class="tab {{activeTab === 'available' ? 'active' : ''}}" bindtap="switchTab" data-tab="available">
+      可领取
+    </view>
+    <view class="tab {{activeTab === 'my' ? 'active' : ''}}" bindtap="switchTab" data-tab="my">
+      我的优惠券
+    </view>
+  </view>
+
+  <view wx:if="{{activeTab === 'available'}}">
+    <view class="coupon-list">
+      <view class="coupon-item" wx:for="{{coupons}}" wx:key="id">
+        <view class="coupon-left">
+          <view class="coupon-value">
+            <text wx:if="{{item.type === 'AMOUNT'}}">¥{{item.value}}</text>
+            <text wx:else>{{item.value}}折</text>
+          </view>
+          <view class="coupon-condition">满{{item.minAmount}}元可用</view>
+        </view>
+        <view class="coupon-right">
+          <view class="coupon-name">{{item.name}}</view>
+          <view class="coupon-time">{{item.startTime}} - {{item.endTime}}</view>
+          <view class="coupon-usage">剩余: {{item.totalQuantity - item.usedQuantity}}</view>
+          <button class="claim-btn" size="mini" type="primary" bindtap="claimCoupon" data-id="{{item.id}}">
+            领取
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{activeTab === 'my'}}">
+    <view class="coupon-list">
+      <view class="coupon-item {{item.status !== 'UNUSED' ? 'disabled' : ''}}" wx:for="{{myCoupons}}" wx:key="id">
+        <view class="coupon-left">
+          <view class="coupon-value">
+            <text>优惠券</text>
+          </view>
+          <view class="coupon-status">{{getStatusText(item.status)}}</view>
+        </view>
+        <view class="coupon-right">
+          <view class="coupon-name">优惠券ID: {{item.couponId}}</view>
+          <view class="coupon-time">过期时间: {{item.expireAt}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading">加载中...</view>
+  <view wx:if="{{!loading && coupons.length === 0 && activeTab === 'available'}}" class="empty">暂无可领取优惠券</view>
+  <view wx:if="{{!loading && myCoupons.length === 0 && activeTab === 'my'}}" class="empty">暂无优惠券</view>
+</view>

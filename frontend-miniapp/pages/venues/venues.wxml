@@ -1,0 +1,37 @@
+<view class="container">
+  <view class="header">
+    <text class="title">场馆列表</text>
+  </view>
+
+  <view class="venue-list">
+    <view class="venue-item" wx:for="{{venues}}" wx:key="id" bindtap="goToVenueDetail" data-id="{{item.id}}">
+      <view class="venue-image" wx:if="{{!item.images}}"></view>
+      <image class="venue-image" wx:else src="{{item.images}}" mode="aspectFill" />
+      <view class="venue-info">
+        <text class="venue-name">{{item.name}}</text>
+        <view class="venue-meta">
+          <text class="venue-address">📍 {{item.address}}</text>
+          <text class="venue-time">⏰ {{item.openTime}} - {{item.closeTime}}</text>
+        </view>
+        <view class="venue-status">
+          <text class="status-tag {{item.status === 'OPEN' ? 'open' : 'closed'}}">
+            {{item.status === 'OPEN' ? '营业中' : '已关闭'}}
+          </text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <view class="no-more" wx:if="{{!hasMore && venues.length > 0}}">
+    <text>没有更多了</text>
+  </view>
+
+  <view class="empty" wx:if="{{!loading && venues.length === 0}}">
+    <text class="empty-icon">🏟️</text>
+    <text class="empty-text">暂无场馆</text>
+  </view>
+</view>

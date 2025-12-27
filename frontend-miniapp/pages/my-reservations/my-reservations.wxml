@@ -1,0 +1,50 @@
+<view class="container">
+  <view class="header">
+    <text class="title">我的预约</text>
+  </view>
+
+  <view class="reservation-list">
+    <view class="reservation-item" wx:for="{{reservations}}" wx:key="id">
+      <view class="item-header">
+        <text class="reservation-no">{{item.reservationNo}}</text>
+        <text class="status {{getStatusClass(item.status)}}">{{getStatusText(item.status)}}</text>
+      </view>
+      
+      <view class="item-body">
+        <view class="info-row">
+          <text class="label">场地ID：</text>
+          <text class="value">{{item.courtId}}</text>
+        </view>
+        <view class="info-row">
+          <text class="label">预约日期：</text>
+          <text class="value">{{item.slotDate}}</text>
+        </view>
+        <view class="info-row">
+          <text class="label">时间段：</text>
+          <text class="value">{{item.startTime}} - {{item.endTime}}</text>
+        </view>
+        <view class="info-row">
+          <text class="label">金额：</text>
+          <text class="value price">¥{{item.amount}}</text>
+        </view>
+      </view>
+
+      <view class="item-footer" wx:if="{{item.status === 'PENDING_PAYMENT' || item.status === 'PAID'}}">
+        <button class="cancel-btn" bindtap="cancelReservation" data-id="{{item.id}}">取消预约</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <view class="no-more" wx:if="{{!hasMore && reservations.length > 0}}">
+    <text>没有更多了</text>
+  </view>
+
+  <view class="empty" wx:if="{{!loading && reservations.length === 0}}">
+    <text class="empty-icon">📅</text>
+    <text class="empty-text">暂无预约记录</text>
+  </view>
+</view>

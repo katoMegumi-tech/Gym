@@ -1,0 +1,182 @@
+.container {
+  padding: 24rpx;
+  background: #f7f8fa;
+  min-height: 100vh;
+}
+
+.court-info {
+  background: white;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.06);
+  border: 2rpx solid #f0f1f5;
+}
+
+.court-name {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #323233;
+  margin-bottom: 16rpx;
+  letter-spacing: 0.5rpx;
+}
+
+.court-desc {
+  font-size: 26rpx;
+  color: #646566;
+  line-height: 1.6;
+}
+
+.date-picker {
+  background: white;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.06);
+  border: 2rpx solid #f0f1f5;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #323233;
+  margin-bottom: 24rpx;
+  padding-left: 12rpx;
+  border-left: 4rpx solid #667eea;
+  letter-spacing: 0.5rpx;
+}
+
+.picker {
+  padding: 24rpx;
+  background: linear-gradient(135deg, #f7f8fa 0%, #f0f1f5 100%);
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  color: #323233;
+  text-align: center;
+  font-weight: 500;
+  border: 2rpx solid #e5e6eb;
+  transition: all 0.3s ease;
+}
+
+.picker:active {
+  background: linear-gradient(135deg, #e5e6eb 0%, #dcdee5 100%);
+}
+
+.timeslots {
+  background: white;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.06);
+  border: 2rpx solid #f0f1f5;
+}
+
+.timeslot-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.timeslot-item {
+  padding: 28rpx 20rpx;
+  background: #f7f8fa;
+  border-radius: 16rpx;
+  text-align: center;
+  border: 2rpx solid #e5e6eb;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.timeslot-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(102, 126, 234, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.timeslot-item.available {
+  background: linear-gradient(135deg, #e6f4ff 0%, #d6ebff 100%);
+  border-color: #91d5ff;
+}
+
+.timeslot-item.available::before {
+  opacity: 1;
+}
+
+.timeslot-item.available:active {
+  background: linear-gradient(135deg, #bae7ff 0%, #91d5ff 100%);
+  transform: scale(0.98);
+}
+
+.timeslot-item.selected {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: #667eea;
+  box-shadow: 0 4rpx 16rpx rgba(102, 126, 234, 0.3);
+  transform: scale(1.02);
+}
+
+.timeslot-item.unavailable {
+  background: #f7f8fa;
+  opacity: 0.4;
+  border-color: #e5e6eb;
+}
+
+.timeslot-time {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #323233;
+  margin-bottom: 8rpx;
+  letter-spacing: 0.5rpx;
+}
+
+.timeslot-item.selected .timeslot-time {
+  color: white;
+}
+
+.timeslot-price {
+  font-size: 24rpx;
+  color: #ff4d4f;
+  font-weight: 600;
+}
+
+.timeslot-item.selected .timeslot-price {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.timeslot-status {
+  font-size: 22rpx;
+  color: #969799;
+  margin-top: 6rpx;
+}
+
+.booking-btn {
+  margin: 24rpx 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 16rpx;
+  height: 96rpx;
+  line-height: 96rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  box-shadow: 0 8rpx 24rpx rgba(102, 126, 234, 0.35);
+  letter-spacing: 2rpx;
+}
+
+.booking-btn:active {
+  opacity: 0.85;
+  transform: scale(0.98);
+  box-shadow: 0 4rpx 16rpx rgba(102, 126, 234, 0.3);
+}
+
+.loading {
+  text-align: center;
+  padding: 60rpx 0;
+  color: #969799;
+  font-size: 28rpx;
+}

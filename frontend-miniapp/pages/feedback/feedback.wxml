@@ -1,0 +1,52 @@
+<view class="container">
+  <view class="form">
+    <view class="form-item">
+      <view class="label">反馈类型</view>
+      <picker mode="selector" range="{{types}}" range-key="label" value="{{selectedType}}" bindchange="onTypeChange">
+        <view class="picker">
+          {{types[selectedType].label}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <view class="label">标题</view>
+      <input class="input" placeholder="请输入标题" value="{{title}}" bindinput="onTitleInput" />
+    </view>
+
+    <view class="form-item">
+      <view class="label">内容</view>
+      <textarea class="textarea" placeholder="请详细描述您的问题或建议" value="{{content}}" bindinput="onContentInput" />
+    </view>
+
+    <view class="form-item">
+      <view class="label">评分（可选）</view>
+      <view class="rating">
+        <text wx:for="{{[1,2,3,4,5]}}" wx:key="*this" class="star {{rating >= item ? 'active' : ''}}" bindtap="onRatingChange" data-rating="{{item}}">
+          ★
+        </text>
+      </view>
+    </view>
+
+    <button class="submit-btn" type="primary" bindtap="handleSubmit">提交反馈</button>
+  </view>
+
+  <view class="history">
+    <view class="history-title">我的反馈</view>
+    <view class="feedback-list">
+      <view class="feedback-item" wx:for="{{feedbackList}}" wx:key="id">
+        <view class="feedback-header">
+          <text class="feedback-type">{{getTypeText(item.type)}}</text>
+          <text class="feedback-status">{{getStatusText(item.status)}}</text>
+        </view>
+        <view class="feedback-title">{{item.title}}</view>
+        <view class="feedback-content">{{item.content}}</view>
+        <view wx:if="{{item.reply}}" class="feedback-reply">
+          <view class="reply-label">回复：</view>
+          <view class="reply-content">{{item.reply}}</view>
+        </view>
+        <view class="feedback-time">{{item.createdAt}}</view>
+      </view>
+    </view>
+  </view>
+</view>

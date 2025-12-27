@@ -1,0 +1,36 @@
+<view class="container">
+  <view class="tabs">
+    <view class="tab {{activeTab === 'VENUE' ? 'active' : ''}}" bindtap="switchTab" data-tab="VENUE">
+      收藏场馆
+    </view>
+    <view class="tab {{activeTab === 'COURT' ? 'active' : ''}}" bindtap="switchTab" data-tab="COURT">
+      收藏场地
+    </view>
+  </view>
+
+  <view class="favorite-list">
+    <view class="favorite-item" wx:for="{{favorites}}" wx:key="id">
+      <view class="item-content" bindtap="goToDetail" data-type="{{activeTab}}" data-id="{{item.targetId}}">
+        <view class="item-icon">
+          <text wx:if="{{activeTab === 'VENUE'}}">🏢</text>
+          <text wx:else>🏀</text>
+        </view>
+        <view class="item-info">
+          <view class="item-title">ID: {{item.targetId}}</view>
+          <view class="item-time">收藏时间: {{item.createdAt}}</view>
+        </view>
+      </view>
+      <view class="item-action">
+        <button class="remove-btn" size="mini" bindtap="removeFavorite" data-id="{{item.id}}">
+          取消收藏
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading">加载中...</view>
+  <view wx:if="{{!loading && favorites.length === 0}}" class="empty">
+    <view class="empty-icon">⭐</view>
+    <view class="empty-text">暂无收藏</view>
+  </view>
+</view>

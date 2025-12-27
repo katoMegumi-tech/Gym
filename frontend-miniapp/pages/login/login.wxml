@@ -1,0 +1,32 @@
+<view class="container">
+  <view class="logo">🏀</view>
+  <view class="title">体育馆预约</view>
+  <view class="subtitle">随时随地，轻松预约</view>
+
+  <view class="login-form">
+    <view class="input-group">
+      <view class="input-label">用户名</view>
+      <input class="input" placeholder="请输入用户名" value="{{username}}" bindinput="onUsernameInput" />
+    </view>
+
+    <view class="input-group">
+      <view class="input-label">密码</view>
+      <input class="input" type="password" placeholder="请输入密码" value="{{password}}" bindinput="onPasswordInput" />
+    </view>
+
+    <button class="login-btn" bindtap="handleLogin" loading="{{loading}}">
+      登录
+    </button>
+
+    <view class="wechat-login">
+      <view class="wechat-text">或使用微信登录</view>
+      <button class="wechat-btn" open-type="getUserInfo" bindgetuserinfo="handleWechatLogin">
+        微信快捷登录
+      </button>
+    </view>
+
+    <view class="tips">
+      测试账号: alice / 123456
+    </view>
+  </view>
+</view>

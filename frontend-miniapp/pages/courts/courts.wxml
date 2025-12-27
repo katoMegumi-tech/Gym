@@ -1,0 +1,36 @@
+<view class="container">
+  <view class="filter">
+    <text class="filter-label">运动类型：</text>
+    <picker mode="selector" range="{{sportTypes}}" range-key="label" bindchange="onTypeChange">
+      <view class="picker">
+        {{selectedTypeLabel}}
+      </view>
+    </picker>
+  </view>
+
+  <view class="court-list">
+    <view class="court-item" wx:for="{{courts}}" wx:key="id" bindtap="goToBooking" data-id="{{item.id}}">
+      <view class="court-image" wx:if="{{!item.images}}"></view>
+      <image class="court-image" wx:else src="{{item.images}}" mode="aspectFill" />
+      <view class="court-info">
+        <text class="court-name">{{item.name}}</text>
+        <text class="court-type">{{item.sportType}}</text>
+        <text class="court-capacity">容量: {{item.capacity}}人</text>
+        <view class="court-status">
+          <text class="status-tag {{item.status === 'AVAILABLE' ? 'available' : 'unavailable'}}">
+            {{item.status === 'AVAILABLE' ? '可预约' : '维护中'}}
+          </text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <view class="empty" wx:if="{{!loading && courts.length === 0}}">
+    <text class="empty-icon">🏟️</text>
+    <text class="empty-text">暂无场地</text>
+  </view>
+</view>
