@@ -25,6 +25,9 @@
         <a-form-item label="用户名">
           <a-input v-model:value="form.username" disabled />
         </a-form-item>
+        <a-form-item label="头像">
+          <ImageUpload v-model:modelValue="form.avatarUrl" type="avatar" placeholder="上传头像" />
+        </a-form-item>
         <a-form-item label="真实姓名">
           <a-input v-model:value="form.realName" />
         </a-form-item>
@@ -60,6 +63,7 @@
 import { ref, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
 import request from '@/utils/request'
+import ImageUpload from '@/components/ImageUpload.vue'
 
 const columns = [
   { title: 'ID', dataIndex: 'id', key: 'id', width: 80 },

@@ -30,6 +30,9 @@
         <a-form-item label="场馆名称" required>
           <a-input v-model:value="form.name" />
         </a-form-item>
+        <a-form-item label="场馆图片">
+          <ImageUpload v-model:modelValue="form.images" type="venue" placeholder="上传场馆图片" />
+        </a-form-item>
         <a-form-item label="地址" required>
           <a-input v-model:value="form.address" />
         </a-form-item>
@@ -61,6 +64,8 @@ import { ref, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
 import { PlusOutlined } from '@ant-design/icons-vue'
 import { getVenueList, createVenue, updateVenue, deleteVenue } from '@/api/venue'
+import ImageUpload from '@/components/ImageUpload.vue'
+import dayjs from 'dayjs'
 
 const columns = [
   { title: 'ID', dataIndex: 'id', key: 'id' },
@@ -104,7 +109,11 @@ const handleTableChange = (pag) => {
 const showModal = (record) => {
   if (record) {
     modalTitle.value = '编辑场馆'
-    form.value = { ...record }
+    form.value = { 
+      ...record,
+      openTime: record.openTime ? dayjs(record.openTime, 'HH:mm:ss') : null,
+      closeTime: record.closeTime ? dayjs(record.closeTime, 'HH:mm:ss') : null
+    }
   } else {
     modalTitle.value = '新增场馆'
     form.value = { status: 'OPEN' }
@@ -114,11 +123,17 @@ const showModal = (record) => {
 
 const handleSubmit = async () => {
   try {
+    const submitData = {
+      ...form.value,
+      openTime: form.value.openTime ? form.value.openTime.format('HH:mm:ss') : null,
+      closeTime: form.value.closeTime ? form.value.closeTime.format('HH:mm:ss') : null
+    }
+    
     if (form.value.id) {
-      await updateVenue(form.value.id, form.value)
+      await updateVenue(form.value.id, submitData)
       message.success('更新成功')
     } else {
-      await createVenue(form.value)
+      await createVenue(submitData)
       message.success('创建成功')
     }
     visible.value = false

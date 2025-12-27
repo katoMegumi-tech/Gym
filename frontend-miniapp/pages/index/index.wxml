@@ -12,8 +12,8 @@
     <view class="section-title">热门场馆</view>
     <scroll-view scroll-x class="venue-scroll">
       <view class="venue-item" wx:for="{{venues}}" wx:key="id" bindtap="goToVenue" data-id="{{item.id}}">
-        <view class="venue-image" wx:if="{{!item.image}}"></view>
-      <image class="venue-image" wx:else src="{{item.image}}" mode="aspectFill" />
+        <view class="venue-image" wx:if="{{!item.images}}"></view>
+        <image class="venue-image" wx:else src="{{item.images}}" mode="aspectFill" />
         <text class="venue-name">{{item.name}}</text>
       </view>
     </scroll-view>

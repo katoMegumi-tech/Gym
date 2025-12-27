@@ -22,7 +22,13 @@ public class AuthController {
     @Operation(summary = "用户登录")
     @PostMapping("/login")
     public Result<LoginVO> login(@Valid @RequestBody LoginDTO dto) {
-        return Result.success(authService.login(dto));
+        return Result.success(authService.login(dto, false));
+    }
+    
+    @Operation(summary = "管理后台登录")
+    @PostMapping("/admin/login")
+    public Result<LoginVO> adminLogin(@Valid @RequestBody LoginDTO dto) {
+        return Result.success(authService.login(dto, true));
     }
     
     @Operation(summary = "用户注册")

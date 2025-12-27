@@ -51,6 +51,28 @@
   border: 4rpx solid rgba(255, 255, 255, 0.3);
 }
 
+.avatar-wrapper {
+  position: relative;
+  margin-bottom: 24rpx;
+  z-index: 1;
+}
+
+.avatar-mask {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 0 0 70rpx 70rpx;
+  padding: 6rpx 0;
+  text-align: center;
+}
+
+.avatar-text {
+  font-size: 20rpx;
+  color: white;
+}
+
 .username {
   font-size: 38rpx;
   color: white;

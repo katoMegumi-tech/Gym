@@ -1,4 +1,5 @@
 const request = require('../../utils/request')
+const upload = require('../../utils/upload')
 
 Page({
   data: {
@@ -24,6 +25,13 @@ Page({
       })
 
       const newVenues = res.data.records || []
+      
+      // 处理场馆图片URL
+      newVenues.forEach(venue => {
+        if (venue.images) {
+          venue.images = upload.getImageUrl(venue.images)
+        }
+      })
       
       this.setData({
         venues: this.data.page === 1 ? newVenues : [...this.data.venues, ...newVenues],

@@ -20,7 +20,7 @@ public class AuthService {
     private final UserMapper userMapper;
     private final RoleService roleService;
     
-    public LoginVO login(LoginDTO dto) {
+    public LoginVO login(LoginDTO dto, boolean isAdminLogin) {
         User user = userMapper.selectOne(new LambdaQueryWrapper<User>()
                 .eq(User::getUsername, dto.getUsername()));
         
@@ -36,17 +36,34 @@ public class AuthService {
             throw new RuntimeException("账号已被禁用");
         }
         
+        // 获取角色信息
+        Role role = roleService.getById(user.getRoleId());
+        if (role == null) {
+            throw new RuntimeException("用户角色不存在");
+        }
+        
+        String roleCode = role.getRoleCode();
+        
+        // 如果是管理后台登录，检查角色权限
+        if (isAdminLogin) {
+            // 只允许超级管理员、系统管理员、场馆管理员登录后台
+            if (!"SUPER_ADMIN".equals(roleCode) && 
+                !"ADMIN".equals(roleCode) && 
+                !"VENUE_MANAGER".equals(roleCode)) {
+                throw new RuntimeException("无权限访问管理后台");
+            }
+        }
+        
         StpUtil.login(user.getId());
         String token = StpUtil.getTokenValue();
-        
-        Role role = roleService.getById(user.getRoleId());
         
         LoginVO vo = new LoginVO();
         vo.setToken(token);
         vo.setUserId(user.getId());
         vo.setUsername(user.getUsername());
         vo.setRealName(user.getRealName());
-        vo.setRoleName(role != null ? role.getRoleName() : null);
+        vo.setRoleName(role.getRoleName());
+        vo.setRoleCode(roleCode);
         
         return vo;
     }

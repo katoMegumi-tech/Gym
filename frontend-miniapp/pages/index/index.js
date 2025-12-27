@@ -1,4 +1,5 @@
 const request = require('../../utils/request')
+const upload = require('../../utils/upload')
 
 Page({
   data: {
@@ -20,9 +21,16 @@ Page({
   async loadVenues() {
     try {
       const res = await request.get('/venues', { page: 1, size: 10 })
-      this.setData({
-        venues: res.data.records
+      const venues = res.data.records || []
+      
+      // 处理场馆图片URL
+      venues.forEach(venue => {
+        if (venue.images) {
+          venue.images = upload.getImageUrl(venue.images)
+        }
       })
+      
+      this.setData({ venues })
     } catch (error) {
       console.error(error)
     }

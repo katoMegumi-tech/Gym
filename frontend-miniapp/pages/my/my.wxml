@@ -1,7 +1,12 @@
 <view class="container">
   <view class="user-info" wx:if="{{userInfo}}">
-    <view class="avatar" wx:if="{{!userInfo.avatarUrl}}"></view>
-    <image class="avatar" wx:else src="{{userInfo.avatarUrl}}" />
+    <view class="avatar-wrapper" bindtap="handleUploadAvatar">
+      <view class="avatar" wx:if="{{!userInfo.avatarUrl}}"></view>
+      <image class="avatar" wx:else src="{{userInfo.avatarUrl}}" />
+      <view class="avatar-mask">
+        <text class="avatar-text">更换头像</text>
+      </view>
+    </view>
     <text class="username">{{userInfo.realName || userInfo.username}}</text>
   </view>
   
