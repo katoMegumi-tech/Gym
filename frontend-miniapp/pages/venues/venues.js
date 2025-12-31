@@ -6,10 +6,18 @@ Page({
     venues: [],
     loading: false,
     page: 1,
-    hasMore: true
+    hasMore: true,
+    keyword: '',
+    searchKeyword: ''
   },
 
-  onLoad() {
+  onLoad(options) {
+    if (options.keyword) {
+      this.setData({ 
+        keyword: decodeURIComponent(options.keyword),
+        searchKeyword: decodeURIComponent(options.keyword)
+      })
+    }
     this.loadVenues()
   },
 
@@ -19,17 +27,30 @@ Page({
     this.setData({ loading: true })
 
     try {
-      const res = await request.get('/venues', {
+      const params = {
         page: this.data.page,
         size: 10
-      })
+      }
+      
+      if (this.data.keyword) {
+        params.keyword = this.data.keyword
+      }
+
+      console.log('搜索参数:', params)
+      const res = await request.get('/venues', params)
+      console.log('搜索结果:', res)
 
       const newVenues = res.data.records || []
       
       // 处理场馆图片URL
       newVenues.forEach(venue => {
         if (venue.images) {
-          venue.images = upload.getImageUrl(venue.images)
+          try {
+            const imgs = JSON.parse(venue.images)
+            venue.coverImage = imgs.length > 0 ? upload.getImageUrl(imgs[0]) : ''
+          } catch (e) {
+            venue.coverImage = upload.getImageUrl(venue.images)
+          }
         }
       })
       
@@ -47,6 +68,31 @@ Page({
     } finally {
       this.setData({ loading: false })
     }
+  },
+
+  onSearchInput(e) {
+    this.setData({ searchKeyword: e.detail.value })
+  },
+
+  onSearch() {
+    this.setData({
+      keyword: this.data.searchKeyword,
+      page: 1,
+      hasMore: true,
+      venues: []
+    })
+    this.loadVenues()
+  },
+
+  onClearSearch() {
+    this.setData({
+      keyword: '',
+      searchKeyword: '',
+      page: 1,
+      hasMore: true,
+      venues: []
+    })
+    this.loadVenues()
   },
 
   onReachBottom() {
@@ -67,7 +113,7 @@ Page({
   goToVenueDetail(e) {
     const id = e.currentTarget.dataset.id
     wx.navigateTo({
-      url: `/pages/courts/courts?venueId=${id}`
+      url: `/pages/venue-detail/venue-detail?id=${id}`
     })
   }
 })

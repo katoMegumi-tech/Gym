@@ -46,7 +46,6 @@
 .coupon-list {
   display: flex;
   flex-direction: column;
-  gap: 24rpx;
 }
 
 .coupon-item {
@@ -56,8 +55,8 @@
   overflow: hidden;
   box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.08);
   border: 2rpx solid #f0f1f5;
-  transition: all 0.3s ease;
   position: relative;
+  margin-bottom: 24rpx;
 }
 
 .coupon-item::before {

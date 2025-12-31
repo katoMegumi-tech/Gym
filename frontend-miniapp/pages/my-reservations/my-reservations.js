@@ -12,6 +12,16 @@ Page({
     this.loadReservations()
   },
 
+  onShow() {
+    // 每次显示页面时刷新数据
+    this.setData({
+      page: 1,
+      hasMore: true,
+      reservations: []
+    })
+    this.loadReservations()
+  },
+
   async loadReservations() {
     if (this.data.loading || !this.data.hasMore) return
 
@@ -56,12 +66,41 @@ Page({
     })
   },
 
+  goToDetail(e) {
+    const id = e.currentTarget.dataset.id
+    wx.navigateTo({
+      url: `/pages/reservation-detail/reservation-detail?id=${id}`
+    })
+  },
+
+  async handlePay(e) {
+    const id = e.currentTarget.dataset.id
+    wx.showLoading({ title: '支付中...' })
+    try {
+      await request.post(`/reservations/${id}/pay`, {
+        paymentMethod: 'WECHAT'
+      })
+      wx.hideLoading()
+      wx.showToast({ title: '支付成功', icon: 'success' })
+      // 刷新列表
+      this.setData({
+        page: 1,
+        hasMore: true,
+        reservations: []
+      })
+      this.loadReservations()
+    } catch (error) {
+      wx.hideLoading()
+      console.error('支付失败:', error)
+    }
+  },
+
   cancelReservation(e) {
     const id = e.currentTarget.dataset.id
     
     wx.showModal({
       title: '取消预约',
-      content: '确定要取消这个预约吗？',
+      content: '确定要取消这个预约吗？已支付的订单将自动退款。',
       success: async (res) => {
         if (res.confirm) {
           try {

@@ -1,5 +1,6 @@
 .container {
   padding: 24rpx;
+  padding-bottom: 180rpx;
   background: #f7f8fa;
   min-height: 100vh;
 }
@@ -27,15 +28,6 @@
   line-height: 1.6;
 }
 
-.date-picker {
-  background: white;
-  border-radius: 20rpx;
-  padding: 32rpx;
-  margin-bottom: 24rpx;
-  box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.06);
-  border: 2rpx solid #f0f1f5;
-}
-
 .section-title {
   font-size: 30rpx;
   font-weight: 600;
@@ -46,137 +38,210 @@
   letter-spacing: 0.5rpx;
 }
 
-.picker {
-  padding: 24rpx;
-  background: linear-gradient(135deg, #f7f8fa 0%, #f0f1f5 100%);
-  border-radius: 12rpx;
-  font-size: 28rpx;
-  color: #323233;
+/* 日期选择 */
+.date-section {
+  background: white;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.06);
+}
+
+.date-list {
+  white-space: nowrap;
+}
+
+.date-item {
+  display: inline-block;
+  width: 120rpx;
+  padding: 20rpx 10rpx;
   text-align: center;
-  font-weight: 500;
-  border: 2rpx solid #e5e6eb;
-  transition: all 0.3s ease;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  margin-right: 16rpx;
+  transition: all 0.3s;
 }
 
-.picker:active {
-  background: linear-gradient(135deg, #e5e6eb 0%, #dcdee5 100%);
+.date-item.selected {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
 }
 
+.date-day {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.date-full {
+  display: block;
+  font-size: 22rpx;
+  margin-top: 6rpx;
+  opacity: 0.8;
+}
+
+/* 时间段 */
 .timeslots {
   background: white;
   border-radius: 20rpx;
   padding: 32rpx;
   margin-bottom: 24rpx;
   box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.06);
-  border: 2rpx solid #f0f1f5;
 }
 
-.timeslot-list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20rpx;
+.slot-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
-.timeslot-item {
-  padding: 28rpx 20rpx;
+.slot-item {
+  width: 48%;
+  padding: 24rpx;
   background: #f7f8fa;
-  border-radius: 16rpx;
-  text-align: center;
+  border-radius: 12rpx;
   border: 2rpx solid #e5e6eb;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+  margin-bottom: 16rpx;
+  box-sizing: border-box;
 }
 
-.timeslot-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, transparent 0%, rgba(102, 126, 234, 0.05) 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.timeslot-item.available {
-  background: linear-gradient(135deg, #e6f4ff 0%, #d6ebff 100%);
-  border-color: #91d5ff;
-}
-
-.timeslot-item.available::before {
-  opacity: 1;
-}
-
-.timeslot-item.available:active {
-  background: linear-gradient(135deg, #bae7ff 0%, #91d5ff 100%);
-  transform: scale(0.98);
-}
-
-.timeslot-item.selected {
+.slot-item.selected {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-color: #667eea;
-  box-shadow: 0 4rpx 16rpx rgba(102, 126, 234, 0.3);
-  transform: scale(1.02);
-}
-
-.timeslot-item.unavailable {
-  background: #f7f8fa;
-  opacity: 0.4;
-  border-color: #e5e6eb;
-}
-
-.timeslot-time {
-  font-size: 28rpx;
-  font-weight: 600;
-  color: #323233;
-  margin-bottom: 8rpx;
-  letter-spacing: 0.5rpx;
-}
-
-.timeslot-item.selected .timeslot-time {
   color: white;
 }
 
-.timeslot-price {
-  font-size: 24rpx;
-  color: #ff4d4f;
+.slot-item.disabled {
+  opacity: 0.5;
+  background: #f0f0f0;
+}
+
+.slot-item.peak {
+  border-color: #ff9800;
+}
+
+.slot-main {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.slot-time {
+  font-size: 28rpx;
   font-weight: 600;
 }
 
-.timeslot-item.selected .timeslot-price {
-  color: rgba(255, 255, 255, 0.95);
+.peak-tag {
+  font-size: 20rpx;
+  background: #ff9800;
+  color: white;
+  padding: 2rpx 8rpx;
+  border-radius: 6rpx;
+  margin-left: 8rpx;
 }
 
-.timeslot-status {
+.slot-price {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #f5576c;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.slot-item.selected .slot-price {
+  color: white;
+}
+
+.slot-status {
   font-size: 22rpx;
-  color: #969799;
-  margin-top: 6rpx;
+  color: #999;
 }
 
-.booking-btn {
-  margin: 24rpx 0;
+.slot-status.available {
+  color: #4caf50;
+}
+
+.slot-item.selected .slot-status {
+  color: rgba(255,255,255,0.8);
+}
+
+/* 联系信息 */
+.contact-section {
+  background: white;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.06);
+}
+
+.form-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.form-item:last-child {
+  border-bottom: none;
+}
+
+.form-label {
+  width: 160rpx;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.form-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+}
+
+/* 底部 */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  padding: 20rpx 30rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 -4rpx 20rpx rgba(0,0,0,0.05);
+}
+
+.price-info {
+  flex: 1;
+}
+
+.price-info .label {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.price-info .price {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #f5576c;
+}
+
+.book-btn {
+  width: 280rpx;
+  height: 88rpx;
+  line-height: 88rpx;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  border-radius: 16rpx;
-  height: 96rpx;
-  line-height: 96rpx;
+  border-radius: 44rpx;
   font-size: 32rpx;
   font-weight: 600;
-  box-shadow: 0 8rpx 24rpx rgba(102, 126, 234, 0.35);
-  letter-spacing: 2rpx;
 }
 
-.booking-btn:active {
-  opacity: 0.85;
-  transform: scale(0.98);
-  box-shadow: 0 4rpx 16rpx rgba(102, 126, 234, 0.3);
+.book-btn.disabled {
+  background: #ccc;
 }
 
-.loading {
+.loading, .empty {
   text-align: center;
   padding: 60rpx 0;
-  color: #969799;
-  font-size: 28rpx;
+  color: #999;
 }

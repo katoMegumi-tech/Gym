@@ -31,15 +31,16 @@
 .court-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 20rpx;
+  justify-content: space-between;
 }
 
 .court-item {
-  width: calc(50% - 10rpx);
+  width: 48%;
   background: white;
   border-radius: 20rpx;
   overflow: hidden;
   box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+  margin-bottom: 20rpx;
 }
 
 .court-image {

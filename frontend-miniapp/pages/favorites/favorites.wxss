@@ -29,7 +29,6 @@
 .favorite-list {
   display: flex;
   flex-direction: column;
-  gap: 20rpx;
 }
 
 .favorite-item {
@@ -40,6 +39,7 @@
   align-items: center;
   justify-content: space-between;
   box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.08);
+  margin-bottom: 20rpx;
 }
 
 .item-content {

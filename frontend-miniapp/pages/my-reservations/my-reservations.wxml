@@ -4,17 +4,13 @@
   </view>
 
   <view class="reservation-list">
-    <view class="reservation-item" wx:for="{{reservations}}" wx:key="id">
+    <view class="reservation-item" wx:for="{{reservations}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
       <view class="item-header">
         <text class="reservation-no">{{item.reservationNo}}</text>
         <text class="status {{getStatusClass(item.status)}}">{{getStatusText(item.status)}}</text>
       </view>
       
       <view class="item-body">
-        <view class="info-row">
-          <text class="label">场地ID：</text>
-          <text class="value">{{item.courtId}}</text>
-        </view>
         <view class="info-row">
           <text class="label">预约日期：</text>
           <text class="value">{{item.slotDate}}</text>
@@ -29,8 +25,9 @@
         </view>
       </view>
 
-      <view class="item-footer" wx:if="{{item.status === 'PENDING_PAYMENT' || item.status === 'PAID'}}">
-        <button class="cancel-btn" bindtap="cancelReservation" data-id="{{item.id}}">取消预约</button>
+      <view class="item-footer" wx:if="{{item.status === 'PENDING_PAYMENT' || item.status === 'PAID'}}" catchtap="">
+        <button wx:if="{{item.status === 'PENDING_PAYMENT'}}" class="pay-btn" catchtap="handlePay" data-id="{{item.id}}">立即支付</button>
+        <button class="cancel-btn" catchtap="cancelReservation" data-id="{{item.id}}">取消预约</button>
       </view>
     </view>
   </view>

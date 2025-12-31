@@ -4,6 +4,8 @@ const upload = require('../../utils/upload')
 Page({
   data: {
     venues: [],
+    announcements: [],
+    searchKeyword: '',
     sportTypes: [
       { type: 'BASKETBALL', name: '篮球', icon: '🏀' },
       { type: 'BADMINTON', name: '羽毛球', icon: '🏸' },
@@ -16,6 +18,12 @@ Page({
 
   onLoad() {
     this.loadVenues()
+    this.loadAnnouncements()
+  },
+
+  onShow() {
+    // 每次显示刷新数据
+    this.loadVenues()
   },
 
   async loadVenues() {
@@ -26,7 +34,12 @@ Page({
       // 处理场馆图片URL
       venues.forEach(venue => {
         if (venue.images) {
-          venue.images = upload.getImageUrl(venue.images)
+          try {
+            const imgs = JSON.parse(venue.images)
+            venue.coverImage = imgs.length > 0 ? upload.getImageUrl(imgs[0]) : ''
+          } catch (e) {
+            venue.coverImage = upload.getImageUrl(venue.images)
+          }
         }
       })
       
@@ -36,10 +49,39 @@ Page({
     }
   },
 
+  async loadAnnouncements() {
+    try {
+      const res = await request.get('/announcements', { page: 1, size: 3, status: 'PUBLISHED' })
+      this.setData({ announcements: res.data.records || [] })
+    } catch (error) {
+      console.error(error)
+    }
+  },
+
+  onSearchInput(e) {
+    console.log('输入内容:', e.detail.value)
+    this.setData({ searchKeyword: e.detail.value })
+  },
+
+  onSearch() {
+    const keyword = this.data.searchKeyword.trim()
+    console.log('搜索关键词:', keyword)
+    if (keyword) {
+      wx.navigateTo({
+        url: `/pages/venues/venues?keyword=${encodeURIComponent(keyword)}`
+      })
+    } else {
+      wx.showToast({
+        title: '请输入搜索内容',
+        icon: 'none'
+      })
+    }
+  },
+
   goToVenue(e) {
     const id = e.currentTarget.dataset.id
     wx.navigateTo({
-      url: `/pages/courts/courts?venueId=${id}`
+      url: `/pages/venue-detail/venue-detail?id=${id}`
     })
   },
 
@@ -50,7 +92,19 @@ Page({
     })
   },
 
-  onSearch(e) {
-    console.log('搜索:', e.detail.value)
+  goToAnnouncement(e) {
+    const item = e.currentTarget.dataset.item
+    wx.showModal({
+      title: item.title,
+      content: item.content,
+      showCancel: false,
+      confirmText: '知道了'
+    })
+  },
+
+  goToVenueList() {
+    wx.navigateTo({
+      url: '/pages/venues/venues'
+    })
   }
 })

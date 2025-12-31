@@ -4,26 +4,40 @@
     <text class="court-desc">{{courtInfo.description}}</text>
   </view>
 
-  <view class="date-picker">
-    <text class="label">选择日期</text>
-    <picker mode="date" value="{{selectedDate}}" bindchange="onDateChange">
-      <view class="picker-value">{{selectedDate}}</view>
-    </picker>
+  <!-- 日期选择 -->
+  <view class="date-section">
+    <text class="section-title">选择日期</text>
+    <scroll-view class="date-list" scroll-x>
+      <view class="date-item {{selectedDate === item.date ? 'selected' : ''}}" 
+            wx:for="{{dateList}}" 
+            wx:key="date"
+            bindtap="selectDate"
+            data-date="{{item.date}}">
+        <text class="date-day">{{item.display}}</text>
+        <text class="date-full">{{item.fullDisplay}}</text>
+      </view>
+    </scroll-view>
   </view>
 
+  <!-- 时间段选择 -->
   <view class="timeslots">
     <text class="section-title">选择时间段</text>
     <view class="loading" wx:if="{{loading}}">加载中...</view>
     <view class="slot-list" wx:else>
       <view 
-        class="slot-item {{selectedSlot && selectedSlot.id === item.id ? 'selected' : ''}} {{item.status !== 'AVAILABLE' ? 'disabled' : ''}}"
+        class="slot-item {{selectedSlot && selectedSlot.id === item.id ? 'selected' : ''}} {{item.status !== 'AVAILABLE' ? 'disabled' : ''}} {{item.isPeak ? 'peak' : ''}}"
         wx:for="{{timeslots}}" 
         wx:key="id"
         bindtap="selectSlot"
         data-index="{{index}}">
-        <text class="slot-time">{{item.startTime}} - {{item.endTime}}</text>
+        <view class="slot-main">
+          <text class="slot-time">{{item.startTime}} - {{item.endTime}}</text>
+          <text class="peak-tag" wx:if="{{item.isPeak}}">高峰</text>
+        </view>
         <text class="slot-price">¥{{item.price}}</text>
-        <text class="slot-status">{{item.status === 'AVAILABLE' ? '可预约' : '已满'}}</text>
+        <text class="slot-status {{item.status === 'AVAILABLE' ? 'available' : ''}}">
+          {{item.status === 'AVAILABLE' ? '可预约' : '已满'}}
+        </text>
       </view>
     </view>
     <view class="empty" wx:if="{{!loading && timeslots.length === 0}}">
@@ -31,11 +45,39 @@
     </view>
   </view>
 
+  <!-- 联系信息 -->
+  <view class="contact-section" wx:if="{{selectedSlot}}">
+    <text class="section-title">联系信息</text>
+    <view class="form-item">
+      <text class="form-label">联系人</text>
+      <input class="form-input" placeholder="请输入联系人姓名" 
+             value="{{contactName}}" 
+             data-field="contactName"
+             bindinput="onInputChange"/>
+    </view>
+    <view class="form-item">
+      <text class="form-label">联系电话</text>
+      <input class="form-input" type="number" placeholder="请输入联系电话" 
+             value="{{contactPhone}}" 
+             data-field="contactPhone"
+             bindinput="onInputChange"/>
+    </view>
+    <view class="form-item">
+      <text class="form-label">参与人数</text>
+      <input class="form-input" type="number" placeholder="1" 
+             value="{{participants}}" 
+             bindinput="onParticipantsChange"/>
+    </view>
+  </view>
+
+  <!-- 底部操作栏 -->
   <view class="footer">
     <view class="price-info" wx:if="{{selectedSlot}}">
       <text class="label">金额：</text>
       <text class="price">¥{{selectedSlot.price}}</text>
     </view>
-    <button class="book-btn" bindtap="handleBooking">确认预约</button>
+    <button class="book-btn {{!selectedSlot ? 'disabled' : ''}}" bindtap="handleBooking">
+      {{selectedSlot ? '确认预约' : '请选择时间段'}}
+    </button>
   </view>
 </view>

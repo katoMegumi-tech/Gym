@@ -1,0 +1,343 @@
+.container {
+  background: #f5f5f5;
+  min-height: 100vh;
+  padding-bottom: 40rpx;
+}
+
+.loading, .empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400rpx;
+  color: #999;
+}
+
+/* 轮播图区域 */
+.banner-section {
+  position: relative;
+}
+
+.banner {
+  width: 100%;
+  height: 450rpx;
+}
+
+.banner image {
+  width: 100%;
+  height: 100%;
+}
+
+.banner-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder-icon {
+  font-size: 120rpx;
+  opacity: 0.5;
+}
+
+.placeholder-text {
+  color: white;
+  font-size: 36rpx;
+  margin-top: 20rpx;
+  opacity: 0.8;
+}
+
+.banner-indicator {
+  position: absolute;
+  bottom: 20rpx;
+  right: 20rpx;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+}
+
+.favorite-btn {
+  position: absolute;
+  top: 20rpx;
+  right: 20rpx;
+  width: 70rpx;
+  height: 70rpx;
+  background: rgba(255,255,255,0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  color: #ccc;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.15);
+}
+
+.favorite-btn.active {
+  color: #f5576c;
+}
+
+/* 主信息卡片 */
+.info-card {
+  background: #fff;
+  margin: -40rpx 20rpx 20rpx;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  position: relative;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.08);
+}
+
+.main-card {
+  z-index: 10;
+}
+
+.venue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16rpx;
+}
+
+.venue-title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+  flex: 1;
+}
+
+.venue-badge {
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  font-weight: 500;
+  margin-left: 16rpx;
+}
+
+.venue-badge.open {
+  background: #e8f5e9;
+  color: #4caf50;
+}
+
+.venue-badge.closed {
+  background: #ffebee;
+  color: #f44336;
+}
+
+.venue-desc {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 24rpx;
+  padding-bottom: 24rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.info-list {
+  margin-top: 16rpx;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-icon {
+  font-size: 36rpx;
+  margin-right: 20rpx;
+}
+
+.info-content {
+  flex: 1;
+}
+
+.info-label {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 4rpx;
+}
+
+.info-value {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.info-value.link {
+  color: #667eea;
+}
+
+.info-arrow {
+  font-size: 36rpx;
+  color: #ccc;
+}
+
+/* 场地统计 */
+.stats-card {
+  background: #fff;
+  margin: 0 20rpx 20rpx;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.08);
+}
+
+.stats-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 24rpx;
+}
+
+.stats-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.stats-item {
+  width: 33.33%;
+  text-align: center;
+  padding: 20rpx 0;
+  box-sizing: border-box;
+}
+
+.stats-icon {
+  font-size: 48rpx;
+  margin-bottom: 8rpx;
+}
+
+.stats-name {
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+}
+
+.stats-count {
+  font-size: 28rpx;
+}
+
+.stats-count .available {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.stats-count .total {
+  color: #999;
+}
+
+/* 场地列表 */
+.section {
+  margin: 0 20rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.section-count {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.empty-courts {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 60rpx;
+  text-align: center;
+  color: #999;
+}
+
+.court-list {
+  background: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.court-card {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.court-card:last-child {
+  border-bottom: none;
+}
+
+.court-card.disabled {
+  opacity: 0.5;
+}
+
+.court-icon {
+  width: 80rpx;
+  height: 80rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  margin-right: 20rpx;
+}
+
+.court-info {
+  flex: 1;
+}
+
+.court-name {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.court-meta {
+  display: flex;
+  align-items: center;
+}
+
+.court-type {
+  font-size: 24rpx;
+  color: #667eea;
+  margin-right: 16rpx;
+}
+
+.court-capacity {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.court-action {
+  display: flex;
+  align-items: center;
+}
+
+.court-status {
+  font-size: 26rpx;
+  color: #999;
+  margin-right: 8rpx;
+}
+
+.court-status.available {
+  color: #4caf50;
+}
+
+.court-arrow {
+  font-size: 36rpx;
+  color: #ccc;
+}
