@@ -12,6 +12,14 @@
       
       <view class="item-body">
         <view class="info-row">
+          <text class="label">场馆：</text>
+          <text class="value">{{item.venueName || '-'}}</text>
+        </view>
+        <view class="info-row">
+          <text class="label">场地：</text>
+          <text class="value">{{item.courtName || '-'}}</text>
+        </view>
+        <view class="info-row">
           <text class="label">预约日期：</text>
           <text class="value">{{item.slotDate}}</text>
         </view>

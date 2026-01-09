@@ -31,13 +31,16 @@
     <a-modal v-model:open="detailVisible" title="预约详情" width="600px" :footer="null">
       <a-descriptions :column="1" bordered v-if="currentRecord">
         <a-descriptions-item label="预约编号">{{ currentRecord.reservationNo }}</a-descriptions-item>
-        <a-descriptions-item label="场地ID">{{ currentRecord.courtId }}</a-descriptions-item>
+        <a-descriptions-item label="用户">{{ currentRecord.userName }}</a-descriptions-item>
+        <a-descriptions-item label="联系电话">{{ currentRecord.userPhone }}</a-descriptions-item>
+        <a-descriptions-item label="场馆">{{ currentRecord.venueName }}</a-descriptions-item>
+        <a-descriptions-item label="场地">{{ currentRecord.courtName }}</a-descriptions-item>
+        <a-descriptions-item label="运动类型">{{ currentRecord.sportType }}</a-descriptions-item>
         <a-descriptions-item label="预约日期">{{ currentRecord.slotDate }}</a-descriptions-item>
         <a-descriptions-item label="时间段">{{ currentRecord.startTime }} - {{ currentRecord.endTime }}</a-descriptions-item>
         <a-descriptions-item label="金额">¥{{ currentRecord.amount }}</a-descriptions-item>
         <a-descriptions-item label="参与人数">{{ currentRecord.participants }}人</a-descriptions-item>
         <a-descriptions-item label="联系人">{{ currentRecord.contactName }}</a-descriptions-item>
-        <a-descriptions-item label="联系电话">{{ currentRecord.contactPhone }}</a-descriptions-item>
         <a-descriptions-item label="状态">
           <a-tag :color="getStatusColor(currentRecord.status)">
             {{ getStatusText(currentRecord.status) }}
@@ -55,8 +58,9 @@ import request from '@/utils/request'
 
 const columns = [
   { title: '预约编号', dataIndex: 'reservationNo', key: 'reservationNo' },
-  { title: '用户ID', dataIndex: 'userId', key: 'userId', width: 100 },
-  { title: '场地ID', dataIndex: 'courtId', key: 'courtId', width: 100 },
+  { title: '用户', dataIndex: 'userName', key: 'userName', width: 120 },
+  { title: '场馆', dataIndex: 'venueName', key: 'venueName', width: 150 },
+  { title: '场地', dataIndex: 'courtName', key: 'courtName', width: 120 },
   { title: '预约日期', dataIndex: 'slotDate', key: 'slotDate' },
   { title: '时间', dataIndex: 'startTime', key: 'startTime' },
   { title: '金额', key: 'amount', width: 100 },

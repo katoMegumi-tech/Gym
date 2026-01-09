@@ -7,20 +7,26 @@ import com.gym.common.Result;
 import com.gym.entity.Court;
 import com.gym.entity.Payment;
 import com.gym.entity.Reservation;
+import com.gym.entity.User;
 import com.gym.entity.Venue;
+import com.gym.mapper.UserMapper;
 import com.gym.service.CourtService;
 import com.gym.service.ReservationService;
 import com.gym.service.VenueService;
+import com.gym.vo.ReservationVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Tag(name = "预约管理")
 @RestController
@@ -31,10 +37,11 @@ public class ReservationController {
     private final ReservationService reservationService;
     private final CourtService courtService;
     private final VenueService venueService;
+    private final UserMapper userMapper;
     
     @Operation(summary = "我的预约列表")
     @GetMapping("/my")
-    public Result<Page<Reservation>> myReservations(
+    public Result<Page<ReservationVO>> myReservations(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(required = false) String status) {
@@ -48,12 +55,19 @@ public class ReservationController {
         }
         wrapper.orderByDesc(Reservation::getCreatedAt);
         
-        return Result.success(reservationService.page(new Page<>(page, size), wrapper));
+        Page<Reservation> reservationPage = reservationService.page(new Page<>(page, size), wrapper);
+        
+        // 转换为VO并填充关联信息
+        Page<ReservationVO> voPage = new Page<>(reservationPage.getCurrent(), reservationPage.getSize(), reservationPage.getTotal());
+        List<ReservationVO> voList = reservationPage.getRecords().stream().map(this::convertToVO).collect(Collectors.toList());
+        voPage.setRecords(voList);
+        
+        return Result.success(voPage);
     }
     
     @Operation(summary = "预约列表（管理员）")
     @GetMapping
-    public Result<Page<Reservation>> list(
+    public Result<Page<ReservationVO>> list(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(required = false) String status,
@@ -68,7 +82,14 @@ public class ReservationController {
         }
         wrapper.orderByDesc(Reservation::getCreatedAt);
         
-        return Result.success(reservationService.page(new Page<>(page, size), wrapper));
+        Page<Reservation> reservationPage = reservationService.page(new Page<>(page, size), wrapper);
+        
+        // 转换为VO并填充关联信息
+        Page<ReservationVO> voPage = new Page<>(reservationPage.getCurrent(), reservationPage.getSize(), reservationPage.getTotal());
+        List<ReservationVO> voList = reservationPage.getRecords().stream().map(this::convertToVO).collect(Collectors.toList());
+        voPage.setRecords(voList);
+        
+        return Result.success(voPage);
     }
     
     @Operation(summary = "创建预约")
@@ -199,5 +220,35 @@ public class ReservationController {
         reservation.setCompletedAt(java.time.LocalDateTime.now());
         reservationService.updateById(reservation);
         return Result.success();
+    }
+    
+    /**
+     * 将Reservation转换为ReservationVO，填充关联信息
+     */
+    private ReservationVO convertToVO(Reservation reservation) {
+        ReservationVO vo = new ReservationVO();
+        BeanUtils.copyProperties(reservation, vo);
+        
+        // 填充用户信息
+        User user = userMapper.selectById(reservation.getUserId());
+        if (user != null) {
+            vo.setUserName(user.getRealName() != null ? user.getRealName() : user.getUsername());
+            vo.setUserPhone(user.getPhone());
+        }
+        
+        // 填充场地和场馆信息
+        Court court = courtService.getById(reservation.getCourtId());
+        if (court != null) {
+            vo.setCourtName(court.getName());
+            vo.setSportType(court.getSportType());
+            vo.setVenueId(court.getVenueId());
+            
+            Venue venue = venueService.getById(court.getVenueId());
+            if (venue != null) {
+                vo.setVenueName(venue.getName());
+            }
+        }
+        
+        return vo;
     }
 }

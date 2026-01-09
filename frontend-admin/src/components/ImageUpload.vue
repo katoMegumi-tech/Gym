@@ -40,8 +40,8 @@ const props = defineProps({
   },
   type: {
     type: String,
-    default: 'avatar', // avatar 或 venue
-    validator: (value) => ['avatar', 'venue'].includes(value)
+    default: 'avatar', // avatar、venue 或 court（court 复用 venue 上传接口）
+    validator: (value) => ['avatar', 'venue', 'court'].includes(value)
   },
   placeholder: {
     type: String,
@@ -84,6 +84,7 @@ const beforeUpload = (file) => {
 // 处理上传
 const handleUpload = async ({ file }) => {
   try {
+    // court 类型复用 venue 上传接口
     const uploadFn = props.type === 'avatar' ? uploadAvatar : uploadVenueImage
     const result = await uploadFn(file)
     
@@ -106,6 +107,7 @@ const handleDelete = async () => {
   if (!fileName.value) return
   
   try {
+    // court 类型复用 venue 删除接口
     const deleteFn = props.type === 'avatar' ? deleteAvatar : deleteVenueImage
     const result = await deleteFn(fileName.value)
     

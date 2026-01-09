@@ -100,7 +100,8 @@
               wx:key="id" 
               bindtap="{{item.status === 'AVAILABLE' ? 'goToBooking' : ''}}" 
               data-id="{{item.id}}">
-          <view class="court-icon">{{getSportTypeIcon(item.sportType)}}</view>
+          <image wx:if="{{item.images}}" class="court-image" src="{{item.images}}" mode="aspectFill" />
+          <view wx:else class="court-icon">{{getSportTypeIcon(item.sportType)}}</view>
           <view class="court-info">
             <view class="court-name">{{item.name}}</view>
             <view class="court-meta">

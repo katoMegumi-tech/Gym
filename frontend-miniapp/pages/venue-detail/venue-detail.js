@@ -51,6 +51,13 @@ Page({
       })
       const courts = res.data.records || []
       
+      // 处理场地图片URL
+      courts.forEach(court => {
+        if (court.images) {
+          court.images = upload.getImageUrl(court.images)
+        }
+      })
+      
       // 统计各类型场地数量
       const stats = {}
       courts.forEach(court => {

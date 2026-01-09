@@ -295,6 +295,13 @@
   margin-right: 20rpx;
 }
 
+.court-image {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 16rpx;
+  margin-right: 20rpx;
+}
+
 .court-info {
   flex: 1;
 }
