@@ -1,17 +1,41 @@
 <view class="container">
   <view class="user-info" wx:if="{{userInfo}}">
+    <view class="user-bg-circle circle1"></view>
+    <view class="user-bg-circle circle2"></view>
     <view class="avatar-wrapper" bindtap="handleUploadAvatar">
-      <view class="avatar" wx:if="{{!userInfo.avatarUrl}}"></view>
-      <image class="avatar" wx:else src="{{userInfo.avatarUrl}}" />
-      <view class="avatar-mask">
-        <text class="avatar-text">更换头像</text>
+      <image class="avatar" wx:if="{{userInfo.avatarUrl}}" src="{{userInfo.avatarUrl}}" mode="aspectFill" />
+      <view class="avatar avatar-default" wx:else>
+        <text class="avatar-icon">👤</text>
+      </view>
+      <view class="avatar-edit">
+        <text class="edit-icon">📷</text>
       </view>
     </view>
     <text class="username">{{userInfo.realName || userInfo.username}}</text>
+    <view class="user-stats">
+      <view class="stat-item">
+        <text class="stat-num">{{userInfo.reservationCount || 0}}</text>
+        <text class="stat-label">预约</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-num">{{userInfo.favoriteCount || 0}}</text>
+        <text class="stat-label">收藏</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-num">{{userInfo.couponCount || 0}}</text>
+        <text class="stat-label">优惠券</text>
+      </view>
+    </view>
   </view>
   
-  <view class="login-btn" wx:else bindtap="goToLogin">
-    <text>点击登录</text>
+  <view class="login-section" wx:else bindtap="goToLogin">
+    <view class="login-avatar">
+      <text class="login-avatar-icon">👤</text>
+    </view>
+    <text class="login-text">点击登录</text>
+    <text class="login-hint">登录后享受更多服务</text>
   </view>
 
   <view class="menu-list">
@@ -28,6 +52,11 @@
     <view class="menu-item" bindtap="goToFavorites">
       <text class="menu-icon">⭐</text>
       <text class="menu-text">我的收藏</text>
+      <text class="menu-arrow">></text>
+    </view>
+    <view class="menu-item" bindtap="goToNotifications">
+      <text class="menu-icon">🔔</text>
+      <text class="menu-text">消息通知</text>
       <text class="menu-arrow">></text>
     </view>
     <view class="menu-item" bindtap="goToFeedback">

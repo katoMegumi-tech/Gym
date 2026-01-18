@@ -11,14 +11,37 @@ Page({
     this.loadUserInfo()
   },
 
-  loadUserInfo() {
+  async loadUserInfo() {
     const userInfo = wx.getStorageSync('userInfo')
     if (userInfo) {
       // 处理头像URL
       if (userInfo.avatarUrl) {
         userInfo.avatarUrl = upload.getImageUrl(userInfo.avatarUrl)
       }
+      
+      // 加载用户统计数据
+      try {
+        const token = wx.getStorageSync('token')
+        if (token) {
+          // 获取预约数量
+          const resRes = await request.get('/reservations/my', { page: 1, size: 1 })
+          userInfo.reservationCount = resRes.data.total || 0
+          
+          // 获取收藏数量
+          const favRes = await request.get('/favorites/my')
+          userInfo.favoriteCount = (favRes.data || []).length
+          
+          // 获取优惠券数量
+          const couponRes = await request.get('/coupons/my', { page: 1, size: 1 })
+          userInfo.couponCount = couponRes.data.total || 0
+        }
+      } catch (e) {
+        console.error('加载统计数据失败:', e)
+      }
+      
       this.setData({ userInfo })
+    } else {
+      this.setData({ userInfo: null })
     }
   },
 
@@ -110,6 +133,12 @@ Page({
     }
     wx.navigateTo({
       url: '/pages/feedback/feedback'
+    })
+  },
+
+  goToNotifications() {
+    wx.navigateTo({
+      url: '/pages/notifications/notifications'
     })
   },
 

@@ -1,22 +1,48 @@
 <view class="container">
-  <view class="header">
-    <text class="title">场馆列表</text>
+  <!-- 搜索栏 -->
+  <view class="search-section">
+    <view class="search-bar">
+      <input class="search-input" placeholder="搜索场馆名称或地址" 
+             value="{{searchKeyword}}" 
+             bindinput="onSearchInput"
+             bindconfirm="onSearch" />
+      <view class="search-btn" bindtap="onSearch">搜索</view>
+    </view>
+    <view class="search-tag" wx:if="{{keyword}}" bindtap="onClearSearch">
+      <text>{{keyword}}</text>
+      <text class="tag-close">×</text>
+    </view>
   </view>
 
   <view class="venue-list">
-    <view class="venue-item" wx:for="{{venues}}" wx:key="id" bindtap="goToVenueDetail" data-id="{{item.id}}">
-      <view class="venue-image" wx:if="{{!item.images}}"></view>
-      <image class="venue-image" wx:else src="{{item.images}}" mode="aspectFill" />
-      <view class="venue-info">
-        <text class="venue-name">{{item.name}}</text>
-        <view class="venue-meta">
-          <text class="venue-address">📍 {{item.address}}</text>
-          <text class="venue-time">⏰ {{item.openTime}} - {{item.closeTime}}</text>
+    <view class="venue-card" wx:for="{{venues}}" wx:key="id" bindtap="goToVenueDetail" data-id="{{item.id}}">
+      <view class="venue-cover">
+        <view class="cover-placeholder" wx:if="{{!item.coverImage}}">
+          <text class="placeholder-icon">🏟️</text>
         </view>
-        <view class="venue-status">
-          <text class="status-tag {{item.status === 'OPEN' ? 'open' : 'closed'}}">
-            {{item.status === 'OPEN' ? '营业中' : '已关闭'}}
-          </text>
+        <image wx:else src="{{item.coverImage}}" mode="aspectFill" class="cover-image"/>
+        <view class="venue-badge {{item.status === 'OPEN' ? 'open' : 'closed'}}">
+          {{item.status === 'OPEN' ? '营业中' : '休息中'}}
+        </view>
+      </view>
+      <view class="venue-content">
+        <view class="venue-name">{{item.name}}</view>
+        <view class="venue-desc" wx:if="{{item.description}}">{{item.description}}</view>
+        <view class="venue-info-row">
+          <text class="info-icon">📍</text>
+          <text class="info-text">{{item.address}}</text>
+        </view>
+        <view class="venue-info-row">
+          <text class="info-icon">🕐</text>
+          <text class="info-text">{{item.openTime}} - {{item.closeTime}}</text>
+        </view>
+        <view class="venue-info-row" wx:if="{{item.contactPhone}}">
+          <text class="info-icon">📞</text>
+          <text class="info-text">{{item.contactPhone}}</text>
+        </view>
+        <view class="venue-action">
+          <text class="action-text">查看详情</text>
+          <text class="action-arrow">›</text>
         </view>
       </view>
     </view>
@@ -32,6 +58,6 @@
 
   <view class="empty" wx:if="{{!loading && venues.length === 0}}">
     <text class="empty-icon">🏟️</text>
-    <text class="empty-text">暂无场馆</text>
+    <text class="empty-text">{{keyword ? '未找到相关场馆' : '暂无场馆'}}</text>
   </view>
 </view>

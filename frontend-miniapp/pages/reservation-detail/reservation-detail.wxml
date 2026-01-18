@@ -1,0 +1,93 @@
+<view class="container">
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+
+  <block wx:elif="{{detail}}">
+    <!-- 状态卡片 -->
+    <view class="status-card {{getStatusClass(detail.reservation.status)}}">
+      <text class="status-text">{{getStatusText(detail.reservation.status)}}</text>
+      <text class="reservation-no">预约编号: {{detail.reservation.reservationNo}}</text>
+    </view>
+
+    <!-- 场地信息 -->
+    <view class="info-card">
+      <view class="card-title">场地信息</view>
+      <view class="info-row">
+        <text class="label">场馆</text>
+        <text class="value">{{detail.venue.name || '-'}}</text>
+      </view>
+      <view class="info-row">
+        <text class="label">场地</text>
+        <text class="value">{{detail.court.name || '-'}}</text>
+      </view>
+      <view class="info-row">
+        <text class="label">运动类型</text>
+        <text class="value">{{detail.court.sportType || '-'}}</text>
+      </view>
+    </view>
+
+    <!-- 预约信息 -->
+    <view class="info-card">
+      <view class="card-title">预约信息</view>
+      <view class="info-row">
+        <text class="label">预约日期</text>
+        <text class="value">{{detail.reservation.slotDate}}</text>
+      </view>
+      <view class="info-row">
+        <text class="label">预约时段</text>
+        <text class="value">{{detail.reservation.startTime}} - {{detail.reservation.endTime}}</text>
+      </view>
+      <view class="info-row">
+        <text class="label">参与人数</text>
+        <text class="value">{{detail.reservation.participants}}人</text>
+      </view>
+      <view class="info-row">
+        <text class="label">联系人</text>
+        <text class="value">{{detail.reservation.contactName || '-'}}</text>
+      </view>
+      <view class="info-row">
+        <text class="label">联系电话</text>
+        <text class="value">{{detail.reservation.contactPhone || '-'}}</text>
+      </view>
+    </view>
+
+    <!-- 费用信息 -->
+    <view class="info-card">
+      <view class="card-title">费用信息</view>
+      <view class="info-row price-row">
+        <text class="label">订单金额</text>
+        <text class="price">¥{{detail.reservation.amount}}</text>
+      </view>
+    </view>
+
+    <!-- 取消信息 -->
+    <view wx:if="{{detail.reservation.cancelReason}}" class="info-card cancel-card">
+      <view class="card-title">取消信息</view>
+      <view class="info-row">
+        <text class="label">取消原因</text>
+        <text class="value">{{detail.reservation.cancelReason}}</text>
+      </view>
+      <view class="info-row">
+        <text class="label">取消时间</text>
+        <text class="value">{{detail.reservation.cancelledAt}}</text>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="action-bar">
+      <button wx:if="{{detail.reservation.status === 'PENDING_PAYMENT'}}" 
+              class="btn btn-pay" bindtap="handlePay">
+        立即支付
+      </button>
+      <button wx:if="{{detail.reservation.status === 'PENDING_PAYMENT' || detail.reservation.status === 'PAID'}}" 
+              class="btn btn-cancel" bindtap="handleCancel">
+        取消预约
+      </button>
+    </view>
+  </block>
+
+  <view wx:else class="empty">
+    <text>预约信息不存在</text>
+  </view>
+</view>

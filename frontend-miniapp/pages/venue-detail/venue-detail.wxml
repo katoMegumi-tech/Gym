@@ -1,0 +1,126 @@
+<view class="container">
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+
+  <block wx:elif="{{venue}}">
+    <!-- 轮播图 -->
+    <view class="banner-section">
+      <swiper class="banner" indicator-dots="{{venue.imageList.length > 1}}" autoplay circular
+              bindchange="onSwiperChange">
+        <swiper-item wx:for="{{venue.imageList}}" wx:key="index">
+          <image src="{{item}}" mode="aspectFill" bindtap="previewImage" data-url="{{item}}"/>
+        </swiper-item>
+        <swiper-item wx:if="{{!venue.imageList || venue.imageList.length === 0}}">
+          <view class="banner-placeholder">
+            <text class="placeholder-icon">🏟️</text>
+            <text class="placeholder-text">{{venue.name}}</text>
+          </view>
+        </swiper-item>
+      </swiper>
+      <view class="banner-indicator" wx:if="{{venue.imageList.length > 1}}">
+        {{currentImageIndex + 1}}/{{venue.imageList.length}}
+      </view>
+      <view class="favorite-btn {{isFavorite ? 'active' : ''}}" bindtap="toggleFavorite">
+        <text>{{isFavorite ? '♥' : '♡'}}</text>
+      </view>
+    </view>
+
+    <!-- 基本信息卡片 -->
+    <view class="info-card main-card">
+      <view class="venue-header">
+        <view class="venue-title">{{venue.name}}</view>
+        <view class="venue-badge {{venue.status === 'OPEN' ? 'open' : 'closed'}}">
+          {{venue.status === 'OPEN' ? '营业中' : '休息中'}}
+        </view>
+      </view>
+      
+      <view wx:if="{{venue.description}}" class="venue-desc">
+        {{venue.description}}
+      </view>
+
+      <view class="info-list">
+        <view class="info-item" bindtap="openLocation">
+          <view class="info-icon">📍</view>
+          <view class="info-content">
+            <view class="info-label">地址</view>
+            <view class="info-value">{{venue.address}}</view>
+          </view>
+          <view class="info-arrow">›</view>
+        </view>
+        
+        <view class="info-item">
+          <view class="info-icon">🕐</view>
+          <view class="info-content">
+            <view class="info-label">营业时间</view>
+            <view class="info-value">{{venue.openTime}} - {{venue.closeTime}}</view>
+          </view>
+        </view>
+        
+        <view class="info-item" wx:if="{{venue.contactPhone}}" bindtap="makePhoneCall">
+          <view class="info-icon">📞</view>
+          <view class="info-content">
+            <view class="info-label">联系电话</view>
+            <view class="info-value link">{{venue.contactPhone}}</view>
+          </view>
+          <view class="info-arrow">›</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 场地统计 -->
+    <view class="stats-card" wx:if="{{courts.length > 0}}">
+      <view class="stats-title">场地概况</view>
+      <view class="stats-grid">
+        <view class="stats-item" wx:for="{{courtStats}}" wx:key="index" wx:for-item="stat" wx:for-index="type">
+          <view class="stats-icon">{{getSportTypeIcon(type)}}</view>
+          <view class="stats-name">{{getSportTypeName(type)}}</view>
+          <view class="stats-count">
+            <text class="available">{{stat.available}}</text>
+            <text class="total">/{{stat.count}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 场地列表 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">可预约场地</text>
+        <text class="section-count">共{{courts.length}}个</text>
+      </view>
+      
+      <view wx:if="{{courts.length === 0}}" class="empty-courts">
+        <text>暂无可用场地</text>
+      </view>
+
+      <view wx:else class="court-list">
+        <view class="court-card {{item.status !== 'AVAILABLE' ? 'disabled' : ''}}" 
+              wx:for="{{courts}}" 
+              wx:key="id" 
+              bindtap="{{item.status === 'AVAILABLE' ? 'goToBooking' : ''}}" 
+              data-id="{{item.id}}">
+          <image wx:if="{{item.images}}" class="court-image" src="{{item.images}}" mode="aspectFill" />
+          <view wx:else class="court-icon">{{getSportTypeIcon(item.sportType)}}</view>
+          <view class="court-info">
+            <view class="court-name">{{item.name}}</view>
+            <view class="court-meta">
+              <text class="court-type">{{getSportTypeName(item.sportType)}}</text>
+              <text class="court-capacity">容纳{{item.capacity}}人</text>
+            </view>
+          </view>
+          <view class="court-action">
+            <view class="court-status {{item.status === 'AVAILABLE' ? 'available' : ''}}">
+              {{item.status === 'AVAILABLE' ? '可预约' : '维护中'}}
+            </view>
+            <view class="court-arrow" wx:if="{{item.status === 'AVAILABLE'}}">›</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <view wx:else class="empty">
+    <text>场馆信息不存在</text>
+  </view>
+</view>

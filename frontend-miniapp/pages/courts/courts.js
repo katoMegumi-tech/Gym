@@ -1,4 +1,5 @@
 const request = require('../../utils/request')
+const upload = require('../../utils/upload')
 
 Page({
   data: {
@@ -51,8 +52,16 @@ Page({
 
       const res = await request.get('/courts', params)
       
+      // 处理场地图片URL
+      const courts = res.data.records || []
+      courts.forEach(court => {
+        if (court.images) {
+          court.images = upload.getImageUrl(court.images)
+        }
+      })
+      
       this.setData({
-        courts: res.data.records || []
+        courts: courts
       })
     } catch (error) {
       console.error('加载场地失败:', error)

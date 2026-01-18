@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Tag(name = "收藏管理")
 @RestController
@@ -37,8 +38,10 @@ public class FavoriteController {
     
     @Operation(summary = "添加收藏")
     @PostMapping
-    public Result<Void> add(@RequestParam String targetType, @RequestParam Long targetId) {
+    public Result<Void> add(@RequestBody Map<String, Object> params) {
         Long userId = StpUtil.getLoginIdAsLong();
+        String targetType = (String) params.get("targetType");
+        Long targetId = Long.valueOf(params.get("targetId").toString());
         
         // 检查是否已收藏
         LambdaQueryWrapper<Favorite> wrapper = new LambdaQueryWrapper<>();
@@ -61,8 +64,10 @@ public class FavoriteController {
     
     @Operation(summary = "取消收藏")
     @DeleteMapping
-    public Result<Void> remove(@RequestParam String targetType, @RequestParam Long targetId) {
+    public Result<Void> remove(@RequestBody Map<String, Object> params) {
         Long userId = StpUtil.getLoginIdAsLong();
+        String targetType = (String) params.get("targetType");
+        Long targetId = Long.valueOf(params.get("targetId").toString());
         
         LambdaQueryWrapper<Favorite> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Favorite::getUserId, userId)

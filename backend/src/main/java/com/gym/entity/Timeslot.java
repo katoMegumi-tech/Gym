@@ -22,6 +22,12 @@ public class Timeslot {
     private Integer bookedCount;
     private Boolean isPeak;
     
+    /**
+     * 乐观锁版本号 - 用于并发控制
+     */
+    @Version
+    private Integer version;
+    
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;
     

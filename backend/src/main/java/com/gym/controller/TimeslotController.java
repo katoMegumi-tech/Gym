@@ -28,11 +28,32 @@ public class TimeslotController {
         
         LocalDate slotDate = LocalDate.parse(date);
         
+        // 先尝试生成时间段（如果不存在）
+        List<Timeslot> timeslots = timeslotService.generateTimeslots(courtId, slotDate);
+        
+        // 按开始时间排序返回
         LambdaQueryWrapper<Timeslot> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Timeslot::getCourtId, courtId)
                .eq(Timeslot::getSlotDate, slotDate)
                .orderByAsc(Timeslot::getStartTime);
         
         return Result.success(timeslotService.list(wrapper));
+    }
+    
+    @Operation(summary = "批量生成时间段")
+    @PostMapping("/generate")
+    public Result<Void> generate(
+            @RequestParam(defaultValue = "7") Integer days) {
+        
+        timeslotService.generateTimeslotsForAllCourts(days);
+        return Result.success();
+    }
+    
+    @Operation(summary = "更新时间段状态")
+    @PutMapping("/{id}")
+    public Result<Void> update(@PathVariable Long id, @RequestBody Timeslot timeslot) {
+        timeslot.setId(id);
+        timeslotService.updateById(timeslot);
+        return Result.success();
     }
 }

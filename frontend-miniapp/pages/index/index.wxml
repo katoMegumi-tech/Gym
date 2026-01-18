@@ -5,16 +5,36 @@
   </view>
 
   <view class="search-bar">
-    <input class="search-input" placeholder="搜索场馆或场地" bindinput="onSearch" />
+    <input class="search-input" placeholder="搜索场馆名称或地址" 
+           value="{{searchKeyword}}" 
+           bindinput="onSearchInput"
+           bindconfirm="onSearch" />
+    <view class="search-btn" bindtap="onSearch">搜索</view>
+  </view>
+
+  <!-- 公告轮播 -->
+  <view class="notice-section" wx:if="{{announcements.length > 0}}">
+    <view class="notice-icon">📢</view>
+    <swiper class="notice-swiper" autoplay circular vertical interval="3000">
+      <swiper-item wx:for="{{announcements}}" wx:key="id" bindtap="goToAnnouncement" data-item="{{item}}">
+        <text class="notice-text">{{item.title}}</text>
+      </swiper-item>
+    </swiper>
   </view>
 
   <view class="section">
-    <view class="section-title">热门场馆</view>
+    <view class="section-header">
+      <text class="section-title">热门场馆</text>
+      <text class="section-more" bindtap="goToVenueList">更多 ></text>
+    </view>
     <scroll-view scroll-x class="venue-scroll">
       <view class="venue-item" wx:for="{{venues}}" wx:key="id" bindtap="goToVenue" data-id="{{item.id}}">
-        <view class="venue-image" wx:if="{{!item.images}}"></view>
-        <image class="venue-image" wx:else src="{{item.images}}" mode="aspectFill" />
-        <text class="venue-name">{{item.name}}</text>
+        <view class="venue-image" wx:if="{{!item.coverImage}}"></view>
+        <image class="venue-image" wx:else src="{{item.coverImage}}" mode="aspectFill" />
+        <view class="venue-name">{{item.name}}</view>
+        <view class="venue-status-tag {{item.status === 'OPEN' ? 'open' : ''}}">
+          {{item.status === 'OPEN' ? '营业中' : '休息中'}}
+        </view>
       </view>
     </scroll-view>
   </view>

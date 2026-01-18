@@ -6,7 +6,13 @@
     "pages/booking/booking",
     "pages/my/my",
     "pages/login/login",
-    "pages/my-reservations/my-reservations"
+    "pages/my-reservations/my-reservations",
+    "pages/reservation-detail/reservation-detail",
+    "pages/venue-detail/venue-detail",
+    "pages/notifications/notifications",
+    "pages/coupons/coupons",
+    "pages/favorites/favorites",
+    "pages/feedback/feedback"
   ],
   "window": {
     "backgroundTextStyle": "light",

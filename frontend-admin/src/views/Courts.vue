@@ -70,6 +70,9 @@
         <a-form-item label="描述">
           <a-textarea v-model:value="form.description" :rows="4" />
         </a-form-item>
+        <a-form-item label="场地图片">
+          <ImageUpload v-model:modelValue="form.images" type="court" placeholder="上传场地图片" />
+        </a-form-item>
         <a-form-item label="状态">
           <a-select v-model:value="form.status">
             <a-select-option value="AVAILABLE">可用</a-select-option>
@@ -86,6 +89,7 @@ import { ref, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
 import { PlusOutlined } from '@ant-design/icons-vue'
 import request from '@/utils/request'
+import ImageUpload from '@/components/ImageUpload.vue'
 
 const columns = [
   { title: 'ID', dataIndex: 'id', key: 'id', width: 80 },
