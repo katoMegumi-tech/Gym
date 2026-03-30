@@ -25,7 +25,7 @@
   <view class="section">
     <view class="section-header">
       <text class="section-title">热门场馆</text>
-      <text class="section-more" bindtap="goToVenueList">更多 ></text>
+      <view class="section-more" bindtap="goToVenueList">更多 ></view>
     </view>
     <scroll-view scroll-x class="venue-scroll">
       <view class="venue-item" wx:for="{{venues}}" wx:key="id" bindtap="goToVenue" data-id="{{item.id}}">

@@ -121,6 +121,7 @@ CREATE TABLE IF NOT EXISTS timeslot (
   quota INT NOT NULL DEFAULT 1 COMMENT '可预约数',
   booked_count INT NOT NULL DEFAULT 0 COMMENT '已预约数',
   is_peak BOOLEAN NOT NULL DEFAULT false COMMENT '是否高峰时段',
+  version INT NOT NULL DEFAULT 0 COMMENT '乐观锁版本号',
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   UNIQUE KEY uk_court_slot (court_id, slot_date, start_time, end_time)

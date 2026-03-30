@@ -67,8 +67,13 @@ Page({
     const keyword = this.data.searchKeyword.trim()
     console.log('搜索关键词:', keyword)
     if (keyword) {
-      wx.navigateTo({
-        url: `/pages/venues/venues?keyword=${encodeURIComponent(keyword)}`
+      // 将搜索关键词保存到全局
+      const app = getApp()
+      app.globalData.searchKeyword = keyword
+      
+      // 跳转到场馆列表页面（tabBar页面）
+      wx.switchTab({
+        url: '/pages/venues/venues'
       })
     } else {
       wx.showToast({
@@ -103,7 +108,7 @@ Page({
   },
 
   goToVenueList() {
-    wx.navigateTo({
+    wx.switchTab({
       url: '/pages/venues/venues'
     })
   }

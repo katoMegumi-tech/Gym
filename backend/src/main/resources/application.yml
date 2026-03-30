@@ -71,3 +71,9 @@ file:
     avatar-dir: uploads/avatars
     venue-dir: uploads/venues
     max-file-size: 5242880
+
+# 微信小程序配置
+wechat:
+  miniapp:
+    app-id: wx36c583112f249d17
+    app-secret: d2f8c7adfea7b6580664285f49f26601

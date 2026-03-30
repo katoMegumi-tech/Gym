@@ -10,15 +10,18 @@ import com.gym.mapper.UserMapper;
 import com.gym.util.Argon2Util;
 import com.gym.vo.LoginVO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
     
     private final UserMapper userMapper;
     private final RoleService roleService;
+    private final WechatService wechatService;
     
     public LoginVO login(LoginDTO dto, boolean isAdminLogin) {
         User user = userMapper.selectOne(new LambdaQueryWrapper<User>()
@@ -94,5 +97,72 @@ public class AuthService {
         user.setStatus("ACTIVE");
         
         userMapper.insert(user);
+    }
+    
+    /**
+     * 微信小程序登录
+     * @param code 微信登录凭证
+     * @return 登录信息
+     */
+    @Transactional
+    public LoginVO wechatLogin(String code) {
+        // 1. 使用code换取openid
+        String openid = wechatService.getOpenId(code);
+        log.info("微信登录, openid={}", openid);
+        
+        // 2. 查询用户
+        User user = userMapper.selectOne(new LambdaQueryWrapper<User>()
+                .eq(User::getWechatOpenid, openid));
+        
+        // 3. 如果用户不存在，自动注册
+        if (user == null) {
+            log.info("用户不存在，自动注册, openid={}", openid);
+            
+            // 获取普通用户角色
+            Role userRole = roleService.getOne(new LambdaQueryWrapper<Role>()
+                    .eq(Role::getRoleCode, "USER"));
+            
+            if (userRole == null) {
+                throw new RuntimeException("系统配置错误：用户角色不存在");
+            }
+            
+            user = new User();
+            user.setUsername("wx_" + openid.substring(openid.length() - 8));
+            user.setWechatOpenid(openid);
+            user.setPasswordHash(""); // 微信登录不需要密码
+            user.setRoleId(userRole.getId());
+            user.setStatus("ACTIVE");
+            userMapper.insert(user);
+            
+            log.info("用户注册成功, userId={}, openid={}", user.getId(), openid);
+        }
+        
+        // 4. 检查用户状态
+        if (!"ACTIVE".equals(user.getStatus())) {
+            throw new RuntimeException("账号已被禁用");
+        }
+        
+        // 5. 获取角色信息
+        Role role = roleService.getById(user.getRoleId());
+        if (role == null) {
+            throw new RuntimeException("用户角色不存在");
+        }
+        
+        // 6. 生成token
+        StpUtil.login(user.getId());
+        String token = StpUtil.getTokenValue();
+        
+        log.info("微信登录成功, userId={}, username={}", user.getId(), user.getUsername());
+        
+        // 7. 返回登录信息
+        LoginVO vo = new LoginVO();
+        vo.setToken(token);
+        vo.setUserId(user.getId());
+        vo.setUsername(user.getUsername());
+        vo.setRealName(user.getRealName());
+        vo.setRoleName(role.getRoleName());
+        vo.setRoleCode(role.getRoleCode());
+        
+        return vo;
     }
 }

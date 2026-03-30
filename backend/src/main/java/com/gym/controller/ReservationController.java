@@ -109,10 +109,14 @@ public class ReservationController {
         String contactPhone = params.get("contactPhone") != null ? 
                 params.get("contactPhone").toString() : "";
         
+        // 获取优惠券ID（可选）
+        Long couponId = params.get("couponId") != null ? 
+                Long.valueOf(params.get("couponId").toString()) : null;
+        
         try {
             Reservation reservation = reservationService.createReservation(
                     userId, courtId, slotDate, startTime, endTime, amount,
-                    participants, contactName, contactPhone);
+                    participants, contactName, contactPhone, couponId);
             return Result.success(reservation);
         } catch (RuntimeException e) {
             return Result.error(e.getMessage());

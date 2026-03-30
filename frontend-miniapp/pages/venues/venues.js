@@ -12,6 +12,7 @@ Page({
   },
 
   onLoad(options) {
+    // 优先使用URL参数中的关键词
     if (options.keyword) {
       this.setData({ 
         keyword: decodeURIComponent(options.keyword),
@@ -19,6 +20,24 @@ Page({
       })
     }
     this.loadVenues()
+  },
+
+  onShow() {
+    // 检查全局搜索关键词（从首页搜索跳转过来）
+    const app = getApp()
+    if (app.globalData.searchKeyword) {
+      this.setData({
+        keyword: app.globalData.searchKeyword,
+        searchKeyword: app.globalData.searchKeyword,
+        page: 1,
+        hasMore: true,
+        venues: []
+      })
+      // 清空全局搜索关键词
+      app.globalData.searchKeyword = ''
+      // 重新加载数据
+      this.loadVenues()
+    }
   },
 
   async loadVenues() {

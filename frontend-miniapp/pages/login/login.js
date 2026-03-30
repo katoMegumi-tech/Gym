@@ -76,18 +76,50 @@ Page({
     }
   },
 
-  handleWechatLogin(e) {
-    if (e.detail.userInfo) {
-      wx.showModal({
-        title: '提示',
-        content: '微信授权登录功能需要配置微信开放平台，当前为演示版本，请使用账号密码登录',
-        showCancel: false
-      })
-    } else {
+  async handleWechatLogin() {
+    this.setData({ loading: true })
+
+    try {
+      // 1. 调用微信登录获取code
+      const loginRes = await wx.login()
+      const code = loginRes.code
+
+      if (!code) {
+        throw new Error('获取微信登录凭证失败')
+      }
+
+      console.log('获取到微信code:', code)
+
+      // 2. 将code发送到后端，换取token
+      const res = await request.post('/auth/wechat-login', { code })
+
+      // 3. 保存token和用户信息
+      wx.setStorageSync('token', res.data.token)
+      wx.setStorageSync('userInfo', res.data)
+      app.globalData.token = res.data.token
+
       wx.showToast({
-        title: '已取消授权',
-        icon: 'none'
+        title: '微信登录成功',
+        icon: 'success',
+        duration: 2000
       })
+
+      // 4. 延迟跳转到首页
+      setTimeout(() => {
+        wx.switchTab({
+          url: '/pages/index/index'
+        })
+      }, 1500)
+
+    } catch (error) {
+      console.error('微信登录失败:', error)
+      wx.showToast({
+        title: error.message || '微信登录失败',
+        icon: 'none',
+        duration: 2000
+      })
+    } finally {
+      this.setData({ loading: false })
     }
   },
 

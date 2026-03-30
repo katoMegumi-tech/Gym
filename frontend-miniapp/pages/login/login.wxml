@@ -20,7 +20,7 @@
 
     <view class="wechat-login">
       <view class="wechat-text">或使用微信登录</view>
-      <button class="wechat-btn" open-type="getUserInfo" bindgetuserinfo="handleWechatLogin">
+      <button class="wechat-btn" bindtap="handleWechatLogin" loading="{{loading}}">
         微信快捷登录
       </button>
     </view>

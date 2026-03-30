@@ -130,7 +130,15 @@
 
 .section-more {
   font-size: 26rpx;
-  color: #999;
+  color: #667eea;
+  padding: 8rpx 16rpx;
+  position: relative;
+  z-index: 10;
+  display: inline-block;
+}
+
+.section-more:active {
+  opacity: 0.6;
 }
 
 .venue-scroll {

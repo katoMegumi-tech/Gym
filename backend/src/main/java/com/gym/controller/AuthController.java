@@ -3,6 +3,7 @@ package com.gym.controller;
 import com.gym.common.Result;
 import com.gym.dto.LoginDTO;
 import com.gym.dto.RegisterDTO;
+import com.gym.dto.WechatLoginDTO;
 import com.gym.service.AuthService;
 import com.gym.vo.LoginVO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,5 +37,11 @@ public class AuthController {
     public Result<Void> register(@Valid @RequestBody RegisterDTO dto) {
         authService.register(dto);
         return Result.success();
+    }
+    
+    @Operation(summary = "微信小程序登录")
+    @PostMapping("/wechat-login")
+    public Result<LoginVO> wechatLogin(@RequestBody WechatLoginDTO dto) {
+        return Result.success(authService.wechatLogin(dto.getCode()));
     }
 }
