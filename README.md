@@ -50,15 +50,14 @@
 
 ### 1. 数据库配置
 
-```sql
-# 创建数据库
-CREATE DATABASE gym_reservation CHARACTER SET utf8mb4;
+```bash
+# 创建数据库并导入完整脚本
+mysql -u root -p < DB/gym_reservation.sql
 
-# 导入表结构
-mysql -u root -p gym_reservation < DB/schema.sql
-
-# 导入示例数据
-mysql -u root -p gym_reservation < DB/sample_data.sql
+# 或者手动执行（在MySQL命令行中）
+# CREATE DATABASE gym_reservation CHARACTER SET utf8mb4;
+# USE gym_reservation;
+# SOURCE DB/gym_reservation.sql;
 ```
 
 ### 2. 后端启动
@@ -120,8 +119,7 @@ npm run dev
 │   ├── app.js                # 小程序入口
 │   └── app.json              # 小程序配置
 └── DB/                        # 数据库脚本
-    ├── schema.sql            # 表结构
-    └── sample_data.sql       # 示例数据
+    └── gym_reservation.sql    # 完整的数据库导出脚本（包含表结构和示例数据）
 ```
 
 ## 数据库表说明
@@ -166,10 +164,46 @@ npm run dev
 
 ## 注意事项
 
-1. 确保MySQL和Redis服务已启动
-2. 修改 `backend/src/main/resources/application.yml` 中的数据库密码
-3. 微信小程序需要在开发者工具中关闭域名校验
-4. 生产环境需要配置真实的微信小程序AppID
+1. **数据库准备**
+   - 确保MySQL 8.0及以上版本已安装并启动
+   - 首次运行需要导入完整的数据库脚本 `DB/gym_reservation.sql`
+   
+2. **配置文件**
+   - 修改 `backend/src/main/resources/application.yml` 中的数据库连接密码
+   - 根据实际环境配置Redis连接
+
+3. **微信小程序开发**
+   - 需要在开发者工具中关闭域名校验（用于测试）
+   - 生产环境需要配置真实的微信小程序AppID和AppSecret
+
+4. **测试账号**
+   - 超级管理员：superadmin / 123456（密码为argon2加密）
+   - 系统管理员：admin / 123456
+   - 普通用户：alice / 123456
+   - 所有默认密码均为：123456
+
+## 项目状态
+
+### 已实现功能
+- ✅ 用户认证系统（账号密码+微信登录）
+- ✅ 场馆和场地管理
+- ✅ 场地预约系统
+- ✅ 角色权限管理
+- ✅ 优惠券管理
+- ✅ 公告系统
+- ✅ 反馈管理
+- ✅ 文件上传功能
+
+### 功能说明
+
+**支付功能**：当前支付功能为模拟实现，接收支付请求并更新预约状态为已支付，用于测试。
+实际生产环境需要接入真实的支付网关（微信支付/支付宝）。
+
+**文件上传**：上传的文件存储在项目的 `uploads` 目录下，包括：
+- `avatars/` - 用户头像
+- `venues/` - 场馆图片
+
+生产环境建议配置文件存储服务（如阿里云OSS、七牛云等）。
 
 ## 开发团队
 

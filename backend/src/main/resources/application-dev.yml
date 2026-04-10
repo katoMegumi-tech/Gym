@@ -4,6 +4,7 @@ spring:
     username: root
     password: Zch12.1159357
   
-  redis:
-    host: localhost
-    port: 6379
+  data:
+    redis:
+      host: localhost
+      port: 6379
