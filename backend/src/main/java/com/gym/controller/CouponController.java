@@ -1,5 +1,6 @@
 package com.gym.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -26,6 +27,7 @@ public class CouponController {
     
     @Operation(summary = "优惠券列表")
     @GetMapping
+    @SaCheckPermission("VENUE:LIST")
     public Result<Page<Coupon>> list(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
@@ -42,6 +44,7 @@ public class CouponController {
     
     @Operation(summary = "创建优惠券")
     @PostMapping
+    @SaCheckPermission("VENUE:CREATE")
     public Result<Void> create(@RequestBody Coupon coupon) {
         coupon.setUsedQuantity(0);
         coupon.setStatus("ACTIVE");
@@ -51,6 +54,7 @@ public class CouponController {
     
     @Operation(summary = "更新优惠券")
     @PutMapping("/{id}")
+    @SaCheckPermission("VENUE:UPDATE")
     public Result<Void> update(@PathVariable Long id, @RequestBody Coupon coupon) {
         coupon.setId(id);
         couponService.updateById(coupon);
@@ -59,6 +63,7 @@ public class CouponController {
     
     @Operation(summary = "领取优惠券")
     @PostMapping("/{id}/claim")
+    @SaCheckPermission("USER_FUNC:RESERVE")
     public Result<Void> claim(@PathVariable Long id) {
         Long userId = StpUtil.getLoginIdAsLong();
         
@@ -94,6 +99,7 @@ public class CouponController {
     
     @Operation(summary = "我的优惠券")
     @GetMapping("/my")
+    @SaCheckPermission("USER_FUNC:MY_RESERVATIONS")
     public Result<Page<UserCoupon>> myCoupons(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,

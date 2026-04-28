@@ -1,5 +1,6 @@
 package com.gym.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gym.common.Result;
@@ -52,6 +53,7 @@ public class AnnouncementController {
     
     @Operation(summary = "创建公告")
     @PostMapping
+    @SaCheckPermission("VENUE:CREATE")
     public Result<Void> create(@RequestBody Announcement announcement) {
         announcementMapper.insert(announcement);
         return Result.success();
@@ -59,6 +61,7 @@ public class AnnouncementController {
     
     @Operation(summary = "更新公告")
     @PutMapping("/{id}")
+    @SaCheckPermission("VENUE:UPDATE")
     public Result<Void> update(@PathVariable Long id, @RequestBody Announcement announcement) {
         announcement.setId(id);
         announcementMapper.updateById(announcement);
@@ -67,6 +70,7 @@ public class AnnouncementController {
     
     @Operation(summary = "删除公告")
     @DeleteMapping("/{id}")
+    @SaCheckPermission("VENUE:DELETE")
     public Result<Void> delete(@PathVariable Long id) {
         announcementMapper.deleteById(id);
         return Result.success();

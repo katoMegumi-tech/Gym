@@ -1,6 +1,8 @@
 package com.gym.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gym.common.Result;
 import com.gym.entity.*;
 import com.gym.service.ReservationService;
@@ -32,6 +34,7 @@ public class StatisticsController {
     
     @Operation(summary = "Dashboard统计数据")
     @GetMapping("/dashboard")
+    @SaCheckPermission("RESERVATION:LIST")
     public Result<Map<String, Object>> dashboard() {
         Map<String, Object> stats = new HashMap<>();
         
@@ -102,6 +105,7 @@ public class StatisticsController {
     
     @Operation(summary = "近7天预约趋势")
     @GetMapping("/reservation-trend")
+    @SaCheckPermission("RESERVATION:LIST")
     public Result<List<Map<String, Object>>> reservationTrend() {
         List<Map<String, Object>> trend = new ArrayList<>();
         LocalDate today = LocalDate.now();
@@ -123,6 +127,7 @@ public class StatisticsController {
     
     @Operation(summary = "各运动类型预约统计")
     @GetMapping("/sport-type-stats")
+    @SaCheckPermission("RESERVATION:LIST")
     public Result<List<Map<String, Object>>> sportTypeStats() {
         List<Map<String, Object>> stats = new ArrayList<>();
         String[] sportTypes = {"BASKETBALL", "BADMINTON", "TENNIS", "FITNESS", "YOGA", "SWIMMING"};

@@ -1,5 +1,6 @@
 package com.gym.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.gym.common.Result;
 import com.gym.entity.Timeslot;
@@ -22,6 +23,7 @@ public class TimeslotController {
     
     @Operation(summary = "查询场地可用时间段")
     @GetMapping
+    @SaCheckPermission("COURT:LIST")
     public Result<List<Timeslot>> list(
             @RequestParam Long courtId,
             @RequestParam String date) {
@@ -42,6 +44,7 @@ public class TimeslotController {
     
     @Operation(summary = "批量生成时间段")
     @PostMapping("/generate")
+    @SaCheckPermission("COURT:CREATE")
     public Result<Void> generate(
             @RequestParam(defaultValue = "7") Integer days) {
         
@@ -51,6 +54,7 @@ public class TimeslotController {
     
     @Operation(summary = "更新时间段状态")
     @PutMapping("/{id}")
+    @SaCheckPermission("COURT:UPDATE")
     public Result<Void> update(@PathVariable Long id, @RequestBody Timeslot timeslot) {
         timeslot.setId(id);
         timeslotService.updateById(timeslot);

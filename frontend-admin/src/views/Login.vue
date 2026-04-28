@@ -22,9 +22,6 @@
           </a-button>
         </a-form-item>
       </a-form>
-      <div class="login-footer">
-        <p>默认账号: admin / 123456</p>
-      </div>
     </div>
   </div>
 </template>

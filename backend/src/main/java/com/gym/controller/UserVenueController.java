@@ -1,5 +1,6 @@
 package com.gym.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.gym.common.Result;
 import com.gym.entity.UserVenue;
@@ -21,6 +22,7 @@ public class UserVenueController {
     
     @Operation(summary = "获取用户管理的场馆")
     @GetMapping("/user/{userId}")
+    @SaCheckPermission("SYSTEM:USER:LIST")
     public Result<List<UserVenue>> getUserVenues(@PathVariable Long userId) {
         LambdaQueryWrapper<UserVenue> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(UserVenue::getUserId, userId);
@@ -29,6 +31,7 @@ public class UserVenueController {
     
     @Operation(summary = "分配场馆给用户")
     @PostMapping
+    @SaCheckPermission("SYSTEM:USER:UPDATE")
     public Result<Void> assign(@RequestParam Long userId, @RequestParam Long venueId) {
         // 检查是否已存在
         LambdaQueryWrapper<UserVenue> wrapper = new LambdaQueryWrapper<>();
@@ -47,6 +50,7 @@ public class UserVenueController {
     
     @Operation(summary = "取消场馆分配")
     @DeleteMapping
+    @SaCheckPermission("SYSTEM:USER:UPDATE")
     public Result<Void> remove(@RequestParam Long userId, @RequestParam Long venueId) {
         LambdaQueryWrapper<UserVenue> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(UserVenue::getUserId, userId)

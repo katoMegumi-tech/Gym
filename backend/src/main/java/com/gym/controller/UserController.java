@@ -1,5 +1,6 @@
 package com.gym.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -22,6 +23,7 @@ public class UserController {
     
     @Operation(summary = "用户列表")
     @GetMapping
+    @SaCheckPermission("SYSTEM:USER:LIST")
     public Result<Page<User>> list(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
@@ -53,6 +55,7 @@ public class UserController {
     
     @Operation(summary = "更新用户信息")
     @PutMapping("/{id}")
+    @SaCheckPermission("SYSTEM:USER:UPDATE")
     public Result<Void> update(@PathVariable Long id, @RequestBody User user) {
         user.setId(id);
         user.setPasswordHash(null); // 不允许通过此接口修改密码

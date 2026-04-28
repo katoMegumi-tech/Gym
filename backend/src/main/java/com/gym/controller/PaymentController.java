@@ -1,5 +1,6 @@
 package com.gym.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -26,6 +27,7 @@ public class PaymentController {
     
     @Operation(summary = "支付列表")
     @GetMapping
+    @SaCheckPermission("RESERVATION:LIST")
     public Result<Page<Payment>> list(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
@@ -150,6 +152,7 @@ public class PaymentController {
     
     @Operation(summary = "退款")
     @PutMapping("/{id}/refund")
+    @SaCheckPermission("RESERVATION:UPDATE")
     public Result<Void> refund(@PathVariable Long id) {
         Payment payment = paymentService.getById(id);
         if (payment == null) {

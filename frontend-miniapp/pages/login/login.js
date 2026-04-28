@@ -52,17 +52,9 @@ Page({
       wx.setStorageSync('userInfo', res.data)
       app.globalData.token = res.data.token
 
-      wx.showToast({
-        title: '登录成功',
-        icon: 'success'
+      wx.switchTab({
+        url: '/pages/index/index'
       })
-
-      // 延迟跳转，让用户看到成功提示
-      setTimeout(() => {
-        wx.switchTab({
-          url: '/pages/index/index'
-        })
-      }, 1500)
 
     } catch (error) {
       console.error('登录失败:', error)
@@ -98,18 +90,9 @@ Page({
       wx.setStorageSync('userInfo', res.data)
       app.globalData.token = res.data.token
 
-      wx.showToast({
-        title: '微信登录成功',
-        icon: 'success',
-        duration: 2000
+      wx.switchTab({
+        url: '/pages/index/index'
       })
-
-      // 4. 延迟跳转到首页
-      setTimeout(() => {
-        wx.switchTab({
-          url: '/pages/index/index'
-        })
-      }, 1500)
 
     } catch (error) {
       console.error('微信登录失败:', error)

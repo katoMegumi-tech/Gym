@@ -1,5 +1,6 @@
 package com.gym.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gym.common.Result;
@@ -20,6 +21,7 @@ public class OperationLogController {
     
     @Operation(summary = "日志列表")
     @GetMapping
+    @SaCheckPermission("SYSTEM:ROLE:LIST")
     public Result<Page<OperationLog>> list(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
@@ -40,6 +42,7 @@ public class OperationLogController {
     
     @Operation(summary = "记录日志")
     @PostMapping
+    @SaCheckPermission("SYSTEM:ROLE:CREATE")
     public Result<Void> log(@RequestBody OperationLog log) {
         operationLogService.save(log);
         return Result.success();

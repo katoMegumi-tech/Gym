@@ -15,23 +15,23 @@
           <AppstoreOutlined />
           <span>场地管理</span>
         </a-menu-item>
-        <a-menu-item key="reservations" @click="navigate('/reservations')">
+        <a-menu-item v-if="!isVenueManager" key="reservations" @click="navigate('/reservations')">
           <CalendarOutlined />
           <span>预约管理</span>
         </a-menu-item>
-        <a-menu-item key="users" @click="navigate('/users')">
+        <a-menu-item v-if="!isVenueManager" key="users" @click="navigate('/users')">
           <TeamOutlined />
           <span>用户管理</span>
         </a-menu-item>
-        <a-menu-item key="announcements" @click="navigate('/announcements')">
+        <a-menu-item v-if="!isVenueManager" key="announcements" @click="navigate('/announcements')">
           <NotificationOutlined />
           <span>公告管理</span>
         </a-menu-item>
-        <a-menu-item key="payments" @click="navigate('/payments')">
+        <a-menu-item v-if="!isVenueManager" key="payments" @click="navigate('/payments')">
           <DollarOutlined />
           <span>支付管理</span>
         </a-menu-item>
-        <a-menu-item key="coupons" @click="navigate('/coupons')">
+        <a-menu-item v-if="isVenueManager || isSystemAdmin" key="coupons" @click="navigate('/coupons')">
           <GiftOutlined />
           <span>优惠券管理</span>
         </a-menu-item>
@@ -65,7 +65,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { 
@@ -87,6 +87,8 @@ const route = useRoute()
 const userStore = useUserStore()
 const collapsed = ref(false)
 const selectedKeys = ref(['dashboard'])
+const isVenueManager = computed(() => userStore.userInfo?.roleCode === 'VENUE_MANAGER')
+const isSystemAdmin = computed(() => ['ADMIN', 'SUPER_ADMIN'].includes(userStore.userInfo?.roleCode))
 
 watch(() => route.path, (path) => {
   const key = path.split('/')[1] || 'dashboard'

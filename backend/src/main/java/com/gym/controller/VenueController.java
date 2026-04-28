@@ -1,5 +1,6 @@
 package com.gym.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gym.common.Result;
@@ -20,6 +21,7 @@ public class VenueController {
     
     @Operation(summary = "场馆列表")
     @GetMapping
+    @SaCheckPermission("VENUE:LIST")
     public Result<Page<Venue>> list(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
@@ -37,12 +39,14 @@ public class VenueController {
     
     @Operation(summary = "场馆详情")
     @GetMapping("/{id}")
+    @SaCheckPermission("VENUE:LIST")
     public Result<Venue> detail(@PathVariable Long id) {
         return Result.success(venueService.getById(id));
     }
     
     @Operation(summary = "创建场馆")
     @PostMapping
+    @SaCheckPermission("VENUE:CREATE")
     public Result<Void> create(@RequestBody Venue venue) {
         venueService.save(venue);
         return Result.success();
@@ -50,6 +54,7 @@ public class VenueController {
     
     @Operation(summary = "更新场馆")
     @PutMapping("/{id}")
+    @SaCheckPermission("VENUE:UPDATE")
     public Result<Void> update(@PathVariable Long id, @RequestBody Venue venue) {
         venue.setId(id);
         venueService.updateById(venue);
@@ -58,6 +63,7 @@ public class VenueController {
     
     @Operation(summary = "删除场馆")
     @DeleteMapping("/{id}")
+    @SaCheckPermission("VENUE:DELETE")
     public Result<Void> delete(@PathVariable Long id) {
         venueService.removeById(id);
         return Result.success();

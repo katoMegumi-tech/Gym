@@ -1,5 +1,6 @@
 package com.gym.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.gym.service.FileStorageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,6 +27,7 @@ public class FileController {
     
     @Operation(summary = "上传用户头像")
     @PostMapping(value = "/upload/avatar", produces = "application/json;charset=UTF-8")
+    @SaCheckPermission("USER_FUNC:MY_RESERVATIONS")
     public ResponseEntity<Map<String, Object>> uploadAvatar(@RequestParam("file") MultipartFile file) {
         try {
             String fileName = fileStorageService.uploadAvatar(file);
@@ -48,6 +50,7 @@ public class FileController {
     
     @Operation(summary = "上传场馆图片")
     @PostMapping(value = "/upload/venue", produces = "application/json;charset=UTF-8")
+    @SaCheckPermission("VENUE:CREATE")
     public ResponseEntity<Map<String, Object>> uploadVenueImage(@RequestParam("file") MultipartFile file) {
         try {
             String fileName = fileStorageService.uploadVenueImage(file);
@@ -82,6 +85,7 @@ public class FileController {
     
     @Operation(summary = "删除头像")
     @DeleteMapping("/avatar/{fileName:.+}")
+    @SaCheckPermission("SYSTEM:USER:UPDATE")
     public ResponseEntity<Map<String, Object>> deleteAvatar(@PathVariable String fileName) {
         return deleteFile(fileName, "avatar");
     }

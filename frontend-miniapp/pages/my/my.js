@@ -12,8 +12,9 @@ Page({
   },
 
   async loadUserInfo() {
-    const userInfo = wx.getStorageSync('userInfo')
-    if (userInfo) {
+    const storageUserInfo = wx.getStorageSync('userInfo')
+    if (storageUserInfo) {
+      const userInfo = { ...storageUserInfo }
       // 处理头像URL
       if (userInfo.avatarUrl) {
         userInfo.avatarUrl = upload.getImageUrl(userInfo.avatarUrl)
@@ -23,17 +24,15 @@ Page({
       try {
         const token = wx.getStorageSync('token')
         if (token) {
-          // 获取预约数量
-          const resRes = await request.get('/reservations/my', { page: 1, size: 1 })
-          userInfo.reservationCount = resRes.data.total || 0
-          
-          // 获取收藏数量
-          const favRes = await request.get('/favorites/my')
-          userInfo.favoriteCount = (favRes.data || []).length
-          
-          // 获取优惠券数量
-          const couponRes = await request.get('/coupons/my', { page: 1, size: 1 })
-          userInfo.couponCount = couponRes.data.total || 0
+          const [resRes, favRes, couponRes] = await Promise.allSettled([
+            request.get('/reservations/my', { page: 1, size: 1 }),
+            request.get('/favorites/my'),
+            request.get('/coupons/my', { page: 1, size: 1 })
+          ])
+
+          userInfo.reservationCount = resRes.status === 'fulfilled' ? (resRes.value.data.total || 0) : 0
+          userInfo.favoriteCount = favRes.status === 'fulfilled' ? ((favRes.value.data || []).length) : 0
+          userInfo.couponCount = couponRes.status === 'fulfilled' ? (couponRes.value.data.total || 0) : 0
         }
       } catch (e) {
         console.error('加载统计数据失败:', e)

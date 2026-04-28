@@ -1,5 +1,6 @@
 package com.gym.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -41,6 +42,7 @@ public class ReservationController {
     
     @Operation(summary = "我的预约列表")
     @GetMapping("/my")
+    @SaCheckPermission("USER_FUNC:MY_RESERVATIONS")
     public Result<Page<ReservationVO>> myReservations(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
@@ -67,6 +69,7 @@ public class ReservationController {
     
     @Operation(summary = "预约列表（管理员）")
     @GetMapping
+    @SaCheckPermission("RESERVATION:LIST")
     public Result<Page<ReservationVO>> list(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
@@ -94,6 +97,7 @@ public class ReservationController {
     
     @Operation(summary = "创建预约")
     @PostMapping
+    @SaCheckPermission("USER_FUNC:RESERVE")
     public Result<Reservation> create(@RequestBody Map<String, Object> params) {
         Long userId = StpUtil.getLoginIdAsLong();
         
@@ -125,6 +129,7 @@ public class ReservationController {
     
     @Operation(summary = "模拟支付")
     @PostMapping("/{id}/pay")
+    @SaCheckPermission("USER_FUNC:RESERVE")
     public Result<Payment> pay(@PathVariable Long id, 
             @RequestParam(defaultValue = "WECHAT") String paymentMethod) {
         
@@ -148,6 +153,7 @@ public class ReservationController {
     
     @Operation(summary = "取消预约")
     @PutMapping("/{id}/cancel")
+    @SaCheckPermission("USER_FUNC:MY_RESERVATIONS")
     public Result<Void> cancel(@PathVariable Long id, 
             @RequestParam(defaultValue = "用户取消") String reason) {
         
@@ -174,6 +180,7 @@ public class ReservationController {
     
     @Operation(summary = "预约详情")
     @GetMapping("/{id}")
+    @SaCheckPermission("USER_FUNC:MY_RESERVATIONS")
     public Result<Map<String, Object>> detail(@PathVariable Long id) {
         Reservation reservation = reservationService.getById(id);
         if (reservation == null) {
@@ -197,6 +204,7 @@ public class ReservationController {
     
     @Operation(summary = "确认预约（管理员）")
     @PutMapping("/{id}/confirm")
+    @SaCheckPermission("RESERVATION:UPDATE")
     public Result<Void> confirm(@PathVariable Long id) {
         Reservation reservation = reservationService.getById(id);
         if (reservation == null) {
@@ -214,6 +222,7 @@ public class ReservationController {
     
     @Operation(summary = "完成预约（管理员）")
     @PutMapping("/{id}/complete")
+    @SaCheckPermission("RESERVATION:UPDATE")
     public Result<Void> complete(@PathVariable Long id) {
         Reservation reservation = reservationService.getById(id);
         if (reservation == null) {

@@ -1,5 +1,6 @@
 package com.gym.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.gym.common.Result;
@@ -23,6 +24,7 @@ public class FavoriteController {
     
     @Operation(summary = "我的收藏列表")
     @GetMapping("/my")
+    @SaCheckPermission("USER_FUNC:FAVORITES")
     public Result<List<Favorite>> myFavorites(@RequestParam(required = false) String targetType) {
         Long userId = StpUtil.getLoginIdAsLong();
         
@@ -38,6 +40,7 @@ public class FavoriteController {
     
     @Operation(summary = "添加收藏")
     @PostMapping
+    @SaCheckPermission("USER_FUNC:FAVORITES")
     public Result<Void> add(@RequestBody Map<String, Object> params) {
         Long userId = StpUtil.getLoginIdAsLong();
         String targetType = (String) params.get("targetType");
@@ -64,6 +67,7 @@ public class FavoriteController {
     
     @Operation(summary = "取消收藏")
     @DeleteMapping
+    @SaCheckPermission("USER_FUNC:FAVORITES")
     public Result<Void> remove(@RequestBody Map<String, Object> params) {
         Long userId = StpUtil.getLoginIdAsLong();
         String targetType = (String) params.get("targetType");
@@ -80,6 +84,7 @@ public class FavoriteController {
     
     @Operation(summary = "检查是否已收藏")
     @GetMapping("/check")
+    @SaCheckPermission("USER_FUNC:FAVORITES")
     public Result<Boolean> check(@RequestParam String targetType, @RequestParam Long targetId) {
         Long userId = StpUtil.getLoginIdAsLong();
         

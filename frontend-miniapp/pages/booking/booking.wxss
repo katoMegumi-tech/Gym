@@ -14,12 +14,33 @@
   border: 2rpx solid #f0f1f5;
 }
 
+.court-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+}
+
 .court-name {
   font-size: 36rpx;
   font-weight: 600;
   color: #323233;
-  margin-bottom: 16rpx;
   letter-spacing: 0.5rpx;
+}
+
+.favorite-btn {
+  font-size: 24rpx;
+  color: #667eea;
+  border: 2rpx solid #d7defa;
+  background: #f3f6ff;
+  border-radius: 24rpx;
+  padding: 8rpx 18rpx;
+}
+
+.favorite-btn.active {
+  color: #ff4d4f;
+  border-color: #ffd1d1;
+  background: #fff5f5;
 }
 
 .court-desc {
@@ -185,6 +206,29 @@
   border-bottom: none;
 }
 
+.coupon-item {
+  justify-content: space-between;
+}
+
+.coupon-value-wrap {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.coupon-value-text {
+  font-size: 26rpx;
+  color: #666;
+  max-width: 420rpx;
+  text-align: right;
+}
+
+.coupon-arrow {
+  margin-left: 12rpx;
+  color: #999;
+}
+
 .form-label {
   width: 160rpx;
   font-size: 28rpx;
@@ -217,6 +261,16 @@
 .price-info .label {
   font-size: 26rpx;
   color: #999;
+}
+
+.origin-price {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.discount {
+  font-size: 26rpx;
+  color: #07c160;
 }
 
 .price-info .price {

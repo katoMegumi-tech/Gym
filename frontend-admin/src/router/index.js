@@ -1,6 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 
+const venueManagerAllowedPaths = new Set([
+  '/',
+  '/dashboard',
+  '/venues',
+  '/courts',
+  '/coupons',
+  '/feedback'
+])
+
 const routes = [
   {
     path: '/login',
@@ -68,10 +77,14 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
+  const roleCode = userStore.userInfo?.roleCode
+
   if (to.path !== '/login' && !userStore.token) {
     next('/login')
   } else if (to.path === '/login' && userStore.token) {
     next('/')
+  } else if (roleCode === 'VENUE_MANAGER' && !venueManagerAllowedPaths.has(to.path)) {
+    next('/venues')
   } else {
     next()
   }

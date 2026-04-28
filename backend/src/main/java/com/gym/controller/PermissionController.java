@@ -1,5 +1,6 @@
 package com.gym.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.gym.common.Result;
 import com.gym.entity.Permission;
@@ -24,6 +25,7 @@ public class PermissionController {
     
     @Operation(summary = "权限列表")
     @GetMapping
+    @SaCheckPermission("SYSTEM:ROLE:LIST")
     public Result<List<Permission>> list(@RequestParam(required = false) String permType) {
         LambdaQueryWrapper<Permission> wrapper = new LambdaQueryWrapper<>();
         if (permType != null && !permType.isEmpty()) {
@@ -35,6 +37,7 @@ public class PermissionController {
     
     @Operation(summary = "创建权限")
     @PostMapping
+    @SaCheckPermission("SYSTEM:ROLE:CREATE")
     public Result<Void> create(@RequestBody Permission permission) {
         permissionService.save(permission);
         return Result.success();
@@ -42,6 +45,7 @@ public class PermissionController {
     
     @Operation(summary = "更新权限")
     @PutMapping("/{id}")
+    @SaCheckPermission("SYSTEM:ROLE:UPDATE")
     public Result<Void> update(@PathVariable Long id, @RequestBody Permission permission) {
         permission.setId(id);
         permissionService.updateById(permission);
@@ -50,6 +54,7 @@ public class PermissionController {
     
     @Operation(summary = "删除权限")
     @DeleteMapping("/{id}")
+    @SaCheckPermission("SYSTEM:ROLE:DELETE")
     public Result<Void> delete(@PathVariable Long id) {
         permissionService.removeById(id);
         return Result.success();
@@ -57,6 +62,7 @@ public class PermissionController {
     
     @Operation(summary = "获取角色权限")
     @GetMapping("/role/{roleId}")
+    @SaCheckPermission("SYSTEM:ROLE:LIST")
     public Result<List<RolePermission>> getRolePermissions(@PathVariable Long roleId) {
         LambdaQueryWrapper<RolePermission> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(RolePermission::getRoleId, roleId);
@@ -65,6 +71,7 @@ public class PermissionController {
     
     @Operation(summary = "分配角色权限")
     @PostMapping("/role/{roleId}")
+    @SaCheckPermission("SYSTEM:ROLE:UPDATE")
     public Result<Void> assignPermissions(
             @PathVariable Long roleId,
             @RequestBody List<Long> permissionIds) {

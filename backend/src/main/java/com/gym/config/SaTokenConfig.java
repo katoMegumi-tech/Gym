@@ -22,6 +22,7 @@ public class SaTokenConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/**")
                 .excludePathPatterns(
                     "/api/auth/login",
+                    "/api/auth/admin/login",
                     "/api/auth/register",
                     "/api/auth/wechat-login",
                     "/doc.html",

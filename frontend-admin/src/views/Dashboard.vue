@@ -90,10 +90,10 @@
             <a-button type="primary" size="large" @click="$router.push('/courts')">
               <AppstoreOutlined /> 管理场地
             </a-button>
-            <a-button type="primary" size="large" @click="$router.push('/reservations')">
+            <a-button v-if="!isVenueManager" type="primary" size="large" @click="$router.push('/reservations')">
               <CalendarOutlined /> 查看预约
             </a-button>
-            <a-button type="primary" size="large" @click="$router.push('/users')">
+            <a-button v-if="!isVenueManager" type="primary" size="large" @click="$router.push('/users')">
               <TeamOutlined /> 用户管理
             </a-button>
             <a-button size="large" @click="generateTimeslots">
@@ -107,14 +107,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { message } from 'ant-design-vue'
 import { CalendarOutlined, ClockCircleOutlined, UserOutlined, ShopOutlined, AppstoreOutlined, TeamOutlined, SyncOutlined } from '@ant-design/icons-vue'
 import request from '@/utils/request'
+import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
+const userStore = useUserStore()
 const loading = ref(false)
+const isVenueManager = computed(() => userStore.userInfo?.roleCode === 'VENUE_MANAGER')
 const stats = ref({ 
   totalReservations: 0, 
   todayReservations: 0, 
@@ -135,16 +138,21 @@ const getStatusColor = (status) => statusColorMap[status] || 'default'
 const loadStats = async () => {
   loading.value = true
   try {
-    // 使用新的统计接口
-    const [statsRes, reservationsRes, usersRes] = await Promise.all([
+    // 场馆管理员不请求用户统计，避免权限不足导致仪表盘请求整体失败
+    const [statsRes, reservationsRes] = await Promise.all([
       request({ url: '/statistics/dashboard' }),
-      request({ url: '/reservations', params: { page: 1, size: 5 } }),
-      request({ url: '/users', params: { page: 1, size: 1 } })
+      request({ url: '/reservations', params: { page: 1, size: 5 } })
     ])
-    
+
+    let totalUsers = 0
+    if (!isVenueManager.value) {
+      const usersRes = await request({ url: '/users', params: { page: 1, size: 1 } })
+      totalUsers = usersRes.data.total || 0
+    }
+
     stats.value = {
       ...statsRes.data,
-      totalUsers: usersRes.data.total || 0
+      totalUsers
     }
     recentReservations.value = reservationsRes.data.records || []
   } catch (error) {

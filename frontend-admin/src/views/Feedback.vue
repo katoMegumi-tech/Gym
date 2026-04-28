@@ -27,7 +27,14 @@
         <template v-if="column.key === 'action'">
           <a-space>
             <a @click="viewDetail(record)">查看</a>
-            <a v-if="!record.reply" @click="showReplyModal(record)">回复</a>
+            <a v-if="isVenueManager && !record.reply" @click="showReplyModal(record)">回复</a>
+            <a-popconfirm
+              v-if="isSystemAdmin"
+              title="确定要删除这条反馈吗？"
+              @confirm="handleDelete(record.id)"
+            >
+              <a style="color: #ff4d4f">删除</a>
+            </a-popconfirm>
           </a-space>
         </template>
       </template>
@@ -64,9 +71,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { message } from 'ant-design-vue'
 import request from '@/utils/request'
+import { useUserStore } from '@/stores/user'
+
+const userStore = useUserStore()
+const isVenueManager = computed(() => userStore.userInfo?.roleCode === 'VENUE_MANAGER')
+const isSystemAdmin = computed(() => ['ADMIN', 'SUPER_ADMIN'].includes(userStore.userInfo?.roleCode))
 
 const columns = [
   { title: 'ID', dataIndex: 'id', key: 'id', width: 80 },
@@ -168,6 +180,19 @@ const handleReply = async () => {
     })
     message.success('回复成功')
     replyVisible.value = false
+    loadData()
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const handleDelete = async (id) => {
+  try {
+    await request({
+      url: `/feedback/${id}`,
+      method: 'delete'
+    })
+    message.success('删除成功')
     loadData()
   } catch (error) {
     console.error(error)

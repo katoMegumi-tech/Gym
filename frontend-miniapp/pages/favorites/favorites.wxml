@@ -11,14 +11,21 @@
   <view class="favorite-list">
     <view class="favorite-item" wx:for="{{favorites}}" wx:key="id">
       <view class="item-content" bindtap="goToDetail" data-type="{{activeTab}}" data-id="{{item.targetId}}">
-        <view class="item-icon">
-          <text wx:if="{{activeTab === 'VENUE'}}">🏢</text>
-          <text wx:else>🏀</text>
+        <view class="item-cover">
+          <image wx:if="{{item.cover}}" class="cover-img" mode="aspectFill" src="{{item.cover}}" />
+          <view wx:else class="item-icon">
+            <text wx:if="{{activeTab === 'VENUE'}}">🏢</text>
+            <text wx:else>🏀</text>
+          </view>
         </view>
         <view class="item-info">
-          <view class="item-title">ID: {{item.targetId}}</view>
-          <view class="item-time">收藏时间: {{item.createdAt}}</view>
+          <view class="item-top">
+            <view class="item-title">{{item.title}}</view>
+            <view class="item-status">{{item.statusText}}</view>
+          </view>
+          <view class="item-desc">{{item.subtitle}}</view>
         </view>
+        <view class="item-arrow">›</view>
       </view>
       <view class="item-action">
         <button class="remove-btn" size="mini" bindtap="removeFavorite" data-id="{{item.id}}">
@@ -32,5 +39,6 @@
   <view wx:if="{{!loading && favorites.length === 0}}" class="empty">
     <view class="empty-icon">⭐</view>
     <view class="empty-text">暂无收藏</view>
+    <view class="empty-sub">去场馆和场地页面收藏你喜欢的项目</view>
   </view>
 </view>

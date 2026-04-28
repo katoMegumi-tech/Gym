@@ -1,5 +1,6 @@
 package com.gym.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gym.common.Result;
@@ -20,6 +21,7 @@ public class CourtController {
     
     @Operation(summary = "场地列表")
     @GetMapping
+    @SaCheckPermission("COURT:LIST")
     public Result<Page<Court>> list(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
@@ -40,12 +42,14 @@ public class CourtController {
     
     @Operation(summary = "场地详情")
     @GetMapping("/{id}")
+    @SaCheckPermission("COURT:LIST")
     public Result<Court> detail(@PathVariable Long id) {
         return Result.success(courtService.getById(id));
     }
     
     @Operation(summary = "创建场地")
     @PostMapping
+    @SaCheckPermission("COURT:CREATE")
     public Result<Void> create(@RequestBody Court court) {
         courtService.save(court);
         return Result.success();
@@ -53,6 +57,7 @@ public class CourtController {
     
     @Operation(summary = "更新场地")
     @PutMapping("/{id}")
+    @SaCheckPermission("COURT:UPDATE")
     public Result<Void> update(@PathVariable Long id, @RequestBody Court court) {
         court.setId(id);
         courtService.updateById(court);
@@ -61,6 +66,7 @@ public class CourtController {
     
     @Operation(summary = "删除场地")
     @DeleteMapping("/{id}")
+    @SaCheckPermission("COURT:DELETE")
     public Result<Void> delete(@PathVariable Long id) {
         courtService.removeById(id);
         return Result.success();

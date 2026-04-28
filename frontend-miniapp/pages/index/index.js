@@ -6,6 +6,7 @@ Page({
     venues: [],
     announcements: [],
     searchKeyword: '',
+    lastVenueLoadAt: 0,
     sportTypes: [
       { type: 'BASKETBALL', name: '篮球', icon: '🏀' },
       { type: 'BADMINTON', name: '羽毛球', icon: '🏸' },
@@ -22,8 +23,10 @@ Page({
   },
 
   onShow() {
-    // 每次显示刷新数据
-    this.loadVenues()
+    // 短时间内返回首页不重复请求，减少切换卡顿
+    if (Date.now() - this.data.lastVenueLoadAt > 8000) {
+      this.loadVenues()
+    }
   },
 
   async loadVenues() {
@@ -43,7 +46,7 @@ Page({
         }
       })
       
-      this.setData({ venues })
+      this.setData({ venues, lastVenueLoadAt: Date.now() })
     } catch (error) {
       console.error(error)
     }

@@ -6,7 +6,7 @@
         <a-select-option value="INACTIVE">无效</a-select-option>
         <a-select-option value="EXPIRED">已过期</a-select-option>
       </a-select>
-      <a-button type="primary" @click="showModal()">
+      <a-button v-if="!isSystemAdmin" type="primary" @click="showModal()">
         <PlusOutlined /> 新增优惠券
       </a-button>
     </div>
@@ -81,11 +81,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
 import { PlusOutlined } from '@ant-design/icons-vue'
 import request from '@/utils/request'
 import dayjs from 'dayjs'
+import { useUserStore } from '@/stores/user'
 
 const columns = [
   { title: 'ID', dataIndex: 'id', key: 'id', width: 80 },
@@ -101,6 +102,8 @@ const columns = [
 
 const data = ref([])
 const loading = ref(false)
+const userStore = useUserStore()
+const isSystemAdmin = computed(() => userStore.userInfo?.roleCode === 'ADMIN')
 const statusFilter = ref(null)
 const pagination = ref({ current: 1, pageSize: 10, total: 0 })
 const visible = ref(false)
@@ -165,8 +168,9 @@ const handleSubmit = async () => {
   try {
     const submitData = {
       ...form.value,
-      startTime: form.value.startTime ? form.value.startTime.format('YYYY-MM-DD HH:mm:ss') : null,
-      endTime: form.value.endTime ? form.value.endTime.format('YYYY-MM-DD HH:mm:ss') : null
+      // 后端LocalDateTime默认按ISO-8601解析，需要T分隔
+      startTime: form.value.startTime ? form.value.startTime.format('YYYY-MM-DDTHH:mm:ss') : null,
+      endTime: form.value.endTime ? form.value.endTime.format('YYYY-MM-DDTHH:mm:ss') : null
     }
     
     if (form.value.id) {

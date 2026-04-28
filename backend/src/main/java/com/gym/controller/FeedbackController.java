@@ -1,5 +1,6 @@
 package com.gym.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -23,6 +24,7 @@ public class FeedbackController {
     
     @Operation(summary = "我的反馈列表")
     @GetMapping("/my")
+    @SaCheckPermission("USER_FUNC:FEEDBACK")
     public Result<Page<Feedback>> myFeedback(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
@@ -38,6 +40,7 @@ public class FeedbackController {
     
     @Operation(summary = "反馈列表（管理员）")
     @GetMapping
+    @SaCheckPermission("RESERVATION:LIST")
     public Result<Page<Feedback>> list(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
@@ -54,6 +57,7 @@ public class FeedbackController {
     
     @Operation(summary = "提交反馈")
     @PostMapping
+    @SaCheckPermission("USER_FUNC:FEEDBACK")
     public Result<Void> submit(@RequestBody Feedback feedback) {
         Long userId = StpUtil.getLoginIdAsLong();
         feedback.setUserId(userId);
@@ -64,6 +68,7 @@ public class FeedbackController {
     
     @Operation(summary = "回复反馈")
     @PutMapping("/{id}/reply")
+    @SaCheckPermission("RESERVATION:UPDATE")
     public Result<Void> reply(@PathVariable Long id, @RequestParam String reply) {
         Feedback feedback = feedbackMapper.selectById(id);
         if (feedback == null) {
@@ -75,6 +80,14 @@ public class FeedbackController {
         feedback.setStatus("RESOLVED");
         feedbackMapper.updateById(feedback);
         
+        return Result.success();
+    }
+
+    @Operation(summary = "删除反馈")
+    @DeleteMapping("/{id}")
+    @SaCheckPermission("RESERVATION:DELETE")
+    public Result<Void> delete(@PathVariable Long id) {
+        feedbackMapper.deleteById(id);
         return Result.success();
     }
 }

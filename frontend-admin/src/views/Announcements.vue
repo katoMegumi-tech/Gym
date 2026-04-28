@@ -63,6 +63,7 @@ import { ref, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
 import { PlusOutlined } from '@ant-design/icons-vue'
 import request from '@/utils/request'
+import dayjs from 'dayjs'
 
 const columns = [
   { title: 'ID', dataIndex: 'id', key: 'id', width: 80 },
@@ -127,7 +128,8 @@ const showModal = (record) => {
 const handleSubmit = async () => {
   try {
     if (form.value.status === 'PUBLISHED' && !form.value.publishTime) {
-      form.value.publishTime = new Date().toISOString()
+      // 后端是LocalDateTime，使用无时区的ISO本地时间格式
+      form.value.publishTime = dayjs().format('YYYY-MM-DDTHH:mm:ss')
     }
     
     if (form.value.id) {

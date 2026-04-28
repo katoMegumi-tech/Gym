@@ -16,7 +16,7 @@
           <a-select-option value="SWIMMING">游泳</a-select-option>
         </a-select>
       </a-space>
-      <a-button type="primary" @click="showModal()">
+      <a-button v-if="!isSystemAdmin" type="primary" @click="showModal()">
         <PlusOutlined /> 新增场地
       </a-button>
     </div>
@@ -85,11 +85,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
 import { PlusOutlined } from '@ant-design/icons-vue'
 import request from '@/utils/request'
 import ImageUpload from '@/components/ImageUpload.vue'
+import { useUserStore } from '@/stores/user'
 
 const columns = [
   { title: 'ID', dataIndex: 'id', key: 'id', width: 80 },
@@ -103,6 +104,8 @@ const columns = [
 const data = ref([])
 const venues = ref([])
 const loading = ref(false)
+const userStore = useUserStore()
+const isSystemAdmin = computed(() => userStore.userInfo?.roleCode === 'ADMIN')
 const venueId = ref(null)
 const sportType = ref(null)
 const pagination = ref({ current: 1, pageSize: 10, total: 0 })
